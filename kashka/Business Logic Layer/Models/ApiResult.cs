@@ -9,10 +9,10 @@ namespace kashka.Business_Logic_Layer.Models
 {
     // Define a class for the API response structure
     [XmlRoot("ObjList")]
-    public class ApiResult
+    public class ApiResult<T>
     {
         [XmlElement("ObjList")]
-        public ObjListData ObjList { get; set; }
+        public T ObjList { get; set; }
 
         [XmlElement("ResultCode")]
         public int ResultCode { get; set; }
