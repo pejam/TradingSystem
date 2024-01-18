@@ -73,7 +73,7 @@ namespace kashka.Presentation_Layer.Forms
                 };
 
                 // Call the SubmitRetail method
-                ApiResult result = await tradeService.SubmitRetailAsync(request);
+                ApiResult<SubmitRetailResult> result = await tradeService.SubmitRetailAsync(request);
 
                 // Check the result
                 if (result.ResultCode == 0)

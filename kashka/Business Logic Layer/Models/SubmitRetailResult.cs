@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 
 namespace kashka.Business_Logic_Layer.Models
 {
-    public class ObjListData
+    public class SubmitRetailResult
     {
         [XmlElement("RolesList")]
         public List<string> RolesList { get; set; }
