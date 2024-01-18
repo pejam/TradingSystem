@@ -100,5 +100,10 @@ namespace kashka.Presentation_Layer.Forms
                 MessageBox.Show($"An error occurred: {ex.Message}");
             }
         }
+
+        private void toolStripStatusLabelNetWorkStatus_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
