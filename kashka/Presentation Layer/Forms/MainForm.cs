@@ -8,6 +8,8 @@ namespace kashka.Presentation_Layer.Forms
 {
     public partial class MainForm : Form
     {
+        internal int userId;
+
         private void ConnectionButton_Click(object sender, EventArgs e)
         {
             try

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace BaseServices.Util
+namespace kashka
 {
     public static class CodePageReflection<T>
     {
