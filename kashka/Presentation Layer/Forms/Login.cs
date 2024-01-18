@@ -25,13 +25,23 @@ namespace kashka.Presentation_Layer.Forms
             string username = txtUsername.Text;
             string password = txtPassword.Text;
 
+            if (string.IsNullOrEmpty(username) )
+            {
+                MessageBox.Show("لطفا نام کاربری را وارد کنید.", "نام کاربری خالیست", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtUsername.Focus();
+                return;
+            }
+
             int userId = IsValidUser(username, password);
             if (userId != 0)
             {
-                MainForm mainForm = new MainForm();
+                /*MainForm mainForm = new MainForm();
                 mainForm.userId = userId;
                 this.Hide();
-                mainForm.Show();
+                mainForm.Show();*/
+                Sample sample = new Sample();
+                this.Hide();
+                sample.Show();
             }
             else
             {
