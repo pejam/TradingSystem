@@ -19,7 +19,7 @@ namespace kashka.Enums
             { "InvoiceNumber", new GridRowModel { Title = "صورتحساب شماره", IsDetail = false } },
             { "BuyerNationalId", new GridRowModel { Title = "خريدار شناسه ملي کد/", IsDetail = false } },
             { "BuyerBusinessRoleCode", new GridRowModel { Title = "خريدار کد نقش تجاري", IsDetail = false } },
-            { "BuyerName", new GridRowModel { Title = "خريدار نام", IsDetail = false } },
+            { "BuyerName", new GridRowModel { Title = "خريدار نام       ", IsDetail = false } },
             { "MobileNumber", new GridRowModel { Title = "همراه تلفن", IsDetail = false } },
             { "SourceWarehousePostalCode", new GridRowModel { Title = "انبار مبدا کد پستي", IsDetail = false } },
             { "DestinationWarehousePostalCode", new GridRowModel { Title = "انبار مقصد کد پستي", IsDetail = false } },

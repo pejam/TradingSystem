@@ -7,6 +7,7 @@ using kashka.Data_Access_Layer.Repositories;
 using System.Windows.Forms;
 using System.Data;
 using kashka.Business_Logic_Layer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace kashka.Presentation_Layer.Forms
 {
@@ -332,16 +333,13 @@ namespace kashka.Presentation_Layer.Forms
             DateTime? fromDate = fromDatePicker.GeorgianDate;
             DateTime? untilDate = untilDatePicker.GeorgianDate;
 
-            if (fromDate == null || untilDate == null)
-            {
-                MessageBox.Show("لطفا تاریخ شروع و پایان را وارد کنید.", "فیلدها خالیست",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            else
+            string errorMessage = ValidateParameters(fromDate, untilDate);
+
+            if (errorMessage.IsNullOrEmpty())
             {
                 DateTime inputFromDate = DateTime.Parse(fromDate.ToString());
                 string fromDateMiladi = inputFromDate.ToString("yyyy-MM-dd");
+
 
                 DateTime inputUntilDate = DateTime.Parse(untilDate.ToString());
                 string untilDateMiladi = inputUntilDate.ToString("yyyy-MM-dd");
@@ -363,6 +361,45 @@ namespace kashka.Presentation_Layer.Forms
                     );
                 }
             }
+            else
+            {
+                MessageBox.Show("خطای اعتبار سنجی:\n" + errorMessage, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string ValidateParameters(DateTime? startDate, DateTime? endDate)
+        {
+            List<string> errors = new List<string>();
+
+            if (Properties.Settings.Default.WorkSpaceId == 0)
+            {
+                errors.Add("لطفا شرکت را انتخاب کنید");
+            }
+
+            if (Properties.Settings.Default.FiscalPeriodId == 0)
+            {
+                errors.Add("لطفا دوره مالی را نتخاب کنید");
+            }
+
+            if (Properties.Settings.Default.StockRoomId == 0)
+            {
+                errors.Add("لطفا انبار را نتخاب کنید");
+            }
+
+            if (startDate == null)
+            {
+                errors.Add("لطفا تاریخ شروع را وارد کنید.");
+            }
+
+            if (endDate == null)
+            {
+                errors.Add("لطفا تاریخ پایان را وارد کنید.");
+            }
+
+
+            string errorMessage = string.Join("\n", errors);
+
+            return errorMessage;
         }
 
 
@@ -385,7 +422,7 @@ namespace kashka.Presentation_Layer.Forms
             submitRetailReportList = GetFinalConsumerReportData(
                 pFPID, pSTARTDATE, pENDDATE, pSTOCKID
             );
-            dataGridViewTajer.DataSource = submitRetailReportList;
+            dataGridViewFinalConsumer.DataSource = submitRetailReportList;
             PrepareFinalConsumerGrid();
         }
 
@@ -637,6 +674,6 @@ namespace kashka.Presentation_Layer.Forms
 
         }
 
-        
+
     }
 }

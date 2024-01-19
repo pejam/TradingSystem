@@ -58,6 +58,7 @@ namespace kashka.Presentation_Layer.Forms
             toolStripSeparator1 = new ToolStripSeparator();
             toolStripLabelLastSended = new ToolStripLabel();
             toolStripLabelLastSendedNo = new ToolStripLabel();
+            btnSend = new Button();
             tabPageFinalConsumer = new TabPage();
             dataGridViewFinalConsumer = new DataGridView();
             CheckBoxFinalConsumer = new DataGridViewCheckBoxColumn();
@@ -70,7 +71,6 @@ namespace kashka.Presentation_Layer.Forms
             toolStripSeparator2 = new ToolStripSeparator();
             toolStripLabel1 = new ToolStripLabel();
             toolStripLabel2 = new ToolStripLabel();
-            btnSend = new Button();
             txtStockRoom = new TextBox();
             txtFiscalPeriod = new TextBox();
             btnStockRoom = new Button();
@@ -135,24 +135,25 @@ namespace kashka.Presentation_Layer.Forms
             tabCtrl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tabCtrl.Controls.Add(tabPageTajer);
             tabCtrl.Controls.Add(tabPageFinalConsumer);
-            tabCtrl.Location = new Point(8, 217);
+            tabCtrl.Location = new Point(8, 196);
             tabCtrl.Margin = new Padding(2);
             tabCtrl.Name = "tabCtrl";
             tabCtrl.RightToLeft = RightToLeft.Yes;
             tabCtrl.RightToLeftLayout = true;
             tabCtrl.SelectedIndex = 0;
-            tabCtrl.Size = new Size(1212, 408);
+            tabCtrl.Size = new Size(1212, 425);
             tabCtrl.TabIndex = 3;
             // 
             // tabPageTajer
             // 
             tabPageTajer.Controls.Add(dataGridViewTajer);
             tabPageTajer.Controls.Add(toolStripTajer);
+            tabPageTajer.Controls.Add(btnSend);
             tabPageTajer.Location = new Point(4, 30);
             tabPageTajer.Margin = new Padding(2);
             tabPageTajer.Name = "tabPageTajer";
             tabPageTajer.Padding = new Padding(2);
-            tabPageTajer.Size = new Size(1204, 374);
+            tabPageTajer.Size = new Size(1204, 391);
             tabPageTajer.TabIndex = 0;
             tabPageTajer.Text = "گزارش تاجر";
             tabPageTajer.UseVisualStyleBackColor = true;
@@ -172,7 +173,7 @@ namespace kashka.Presentation_Layer.Forms
             dataGridViewCellStyle1.BackColor = SystemColors.GradientInactiveCaption;
             dataGridViewTajer.RowsDefaultCellStyle = dataGridViewCellStyle1;
             dataGridViewTajer.RowTemplate.Height = 55;
-            dataGridViewTajer.Size = new Size(1200, 338);
+            dataGridViewTajer.Size = new Size(1200, 355);
             dataGridViewTajer.TabIndex = 14;
             // 
             // CheckBox
@@ -262,6 +263,19 @@ namespace kashka.Presentation_Layer.Forms
             toolStripLabelLastSendedNo.Name = "toolStripLabelLastSendedNo";
             toolStripLabelLastSendedNo.Size = new Size(0, 29);
             // 
+            // btnSend
+            // 
+            btnSend.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnSend.BackgroundImage = (Image)resources.GetObject("btnSend.BackgroundImage");
+            btnSend.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSend.Location = new Point(137, 244);
+            btnSend.Margin = new Padding(1);
+            btnSend.Name = "btnSend";
+            btnSend.Size = new Size(43, 118);
+            btnSend.TabIndex = 10;
+            btnSend.Tag = "ارسال";
+            btnSend.UseVisualStyleBackColor = true;
+            // 
             // tabPageFinalConsumer
             // 
             tabPageFinalConsumer.Controls.Add(dataGridViewFinalConsumer);
@@ -270,7 +284,7 @@ namespace kashka.Presentation_Layer.Forms
             tabPageFinalConsumer.Margin = new Padding(2);
             tabPageFinalConsumer.Name = "tabPageFinalConsumer";
             tabPageFinalConsumer.Padding = new Padding(2);
-            tabPageFinalConsumer.Size = new Size(1204, 421);
+            tabPageFinalConsumer.Size = new Size(1204, 391);
             tabPageFinalConsumer.TabIndex = 1;
             tabPageFinalConsumer.Text = "گزارش مصرف کننده نهایی";
             tabPageFinalConsumer.UseVisualStyleBackColor = true;
@@ -290,7 +304,7 @@ namespace kashka.Presentation_Layer.Forms
             dataGridViewCellStyle2.BackColor = SystemColors.GradientInactiveCaption;
             dataGridViewFinalConsumer.RowsDefaultCellStyle = dataGridViewCellStyle2;
             dataGridViewFinalConsumer.RowTemplate.Height = 55;
-            dataGridViewFinalConsumer.Size = new Size(1200, 385);
+            dataGridViewFinalConsumer.Size = new Size(1200, 355);
             dataGridViewFinalConsumer.TabIndex = 15;
             // 
             // CheckBoxFinalConsumer
@@ -379,19 +393,6 @@ namespace kashka.Presentation_Layer.Forms
             // 
             toolStripLabel2.Name = "toolStripLabel2";
             toolStripLabel2.Size = new Size(0, 29);
-            // 
-            // btnSend
-            // 
-            btnSend.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnSend.BackgroundImage = (Image)resources.GetObject("btnSend.BackgroundImage");
-            btnSend.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSend.Location = new Point(24, 708);
-            btnSend.Margin = new Padding(1);
-            btnSend.Name = "btnSend";
-            btnSend.Size = new Size(43, 27);
-            btnSend.TabIndex = 10;
-            btnSend.Tag = "ارسال";
-            btnSend.UseVisualStyleBackColor = true;
             // 
             // txtStockRoom
             // 
@@ -553,7 +554,6 @@ namespace kashka.Presentation_Layer.Forms
             Controls.Add(lblStockRoom);
             Controls.Add(lblFiscalPeriod);
             Controls.Add(lblWorkSpace);
-            Controls.Add(btnSend);
             Controls.Add(tabCtrl);
             Controls.Add(statusStrip1);
             Name = "MainForm";
