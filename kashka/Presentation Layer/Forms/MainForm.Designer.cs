@@ -12,35 +12,6 @@ namespace kashka.Presentation_Layer.Forms
 {
     partial class MainForm : Form
     {
-
-        private readonly DataRepository dataRepository;
-
-        public MainForm()
-        {
-            InitializeComponent();
-
-            // Initialize the repository with your connection string
-            dataRepository = new DataRepository(
-                ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString);
-            LoadData();
-        }
-
-        private void LoadData()
-        {
-            // Load data from the database and bind it to the DataGridView
-            dataGridView.ReadOnly = true;
-            //dataGridView.DataSource = dataRepository.GetData();
-            List<Person> people = dataRepository.GetAllPerson();
-            dataGridView.DataSource = people;
-        }
-
-        /*private void btnSave_Click(object sender, EventArgs e)
-        {
-            // Save data to the database and refresh the DataGridView
-            dataRepository.SaveData(txtData.Text);
-            dataGridView.DataSource = dataRepository.GetData();
-        }*/
-
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -67,19 +38,17 @@ namespace kashka.Presentation_Layer.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             txtNumber = new TextBox();
             statusStrip1 = new StatusStrip();
+            toolStripStatusLabelVersion = new ToolStripStatusLabel();
+            toolStripStatusLabelNetWorkStatus = new ToolStripStatusLabel();
             tabCtrl = new TabControl();
             tabPageTajer = new TabPage();
-            tabPageFinalConsumer = new TabPage();
-            cmbCompany = new ComboBox();
-            cmbFiscalPeriod = new ComboBox();
-            label1 = new Label();
-            label2 = new Label();
-            cmbStock = new ComboBox();
-            btnReferesh = new Button();
+            dataGridViewTajer = new DataGridView();
+            CheckBox = new DataGridViewCheckBoxColumn();
             toolStripTajer = new ToolStrip();
             toolStripButtonDeselectAll = new ToolStripButton();
             toolStripButtonSellectAll = new ToolStripButton();
@@ -89,11 +58,8 @@ namespace kashka.Presentation_Layer.Forms
             toolStripSeparator1 = new ToolStripSeparator();
             toolStripLabelLastSended = new ToolStripLabel();
             toolStripLabelLastSendedNo = new ToolStripLabel();
-            toolStripStatusLabelNetWorkStatus = new ToolStripStatusLabel();
-            toolStripStatusLabelVersion = new ToolStripStatusLabel();
-            btnSend = new Button();
-            dataGridViewTajer = new DataGridView();
-            CheckBox = new DataGridViewCheckBoxColumn();
+            tabPageFinalConsumer = new TabPage();
+            dataGridViewFinalConsumer = new DataGridView();
             toolStripFinalConsumer = new ToolStrip();
             toolStripButton1 = new ToolStripButton();
             toolStripButton2 = new ToolStripButton();
@@ -103,12 +69,21 @@ namespace kashka.Presentation_Layer.Forms
             toolStripSeparator2 = new ToolStripSeparator();
             toolStripLabel1 = new ToolStripLabel();
             toolStripLabel2 = new ToolStripLabel();
+            cmbCompany = new ComboBox();
+            cmbFiscalPeriod = new ComboBox();
+            label1 = new Label();
+            label2 = new Label();
+            cmbStock = new ComboBox();
+            btnReferesh = new Button();
+            btnSend = new Button();
+            CheckBoxFinalConsumer = new DataGridViewCheckBoxColumn();
             statusStrip1.SuspendLayout();
             tabCtrl.SuspendLayout();
             tabPageTajer.SuspendLayout();
-            tabPageFinalConsumer.SuspendLayout();
-            toolStripTajer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewTajer).BeginInit();
+            toolStripTajer.SuspendLayout();
+            tabPageFinalConsumer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewFinalConsumer).BeginInit();
             toolStripFinalConsumer.SuspendLayout();
             SuspendLayout();
             // 
@@ -130,6 +105,21 @@ namespace kashka.Presentation_Layer.Forms
             statusStrip1.Size = new Size(1762, 42);
             statusStrip1.TabIndex = 2;
             statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabelVersion
+            // 
+            toolStripStatusLabelVersion.Name = "toolStripStatusLabelVersion";
+            toolStripStatusLabelVersion.Padding = new Padding(0, 0, 50, 0);
+            toolStripStatusLabelVersion.Size = new Size(147, 32);
+            toolStripStatusLabelVersion.Tag = "";
+            toolStripStatusLabelVersion.Text = "نسخه 1.0";
+            // 
+            // toolStripStatusLabelNetWorkStatus
+            // 
+            toolStripStatusLabelNetWorkStatus.ForeColor = Color.DarkOrange;
+            toolStripStatusLabelNetWorkStatus.Name = "toolStripStatusLabelNetWorkStatus";
+            toolStripStatusLabelNetWorkStatus.Size = new Size(220, 32);
+            toolStripStatusLabelNetWorkStatus.Text = "وضعیت اتصال شبکه";
             // 
             // tabCtrl
             // 
@@ -155,74 +145,37 @@ namespace kashka.Presentation_Layer.Forms
             tabPageTajer.TabIndex = 0;
             tabPageTajer.Text = "گزارش تاجر";
             tabPageTajer.UseVisualStyleBackColor = true;
+            tabPageTajer.Enter += tabPageTajer_Enter;
             // 
-            // tabPageFinalConsumer
+            // dataGridViewTajer
             // 
-            tabPageFinalConsumer.Controls.Add(toolStripFinalConsumer);
-            tabPageFinalConsumer.Location = new Point(8, 46);
-            tabPageFinalConsumer.Name = "tabPageFinalConsumer";
-            tabPageFinalConsumer.Padding = new Padding(3);
-            tabPageFinalConsumer.Size = new Size(1734, 922);
-            tabPageFinalConsumer.TabIndex = 1;
-            tabPageFinalConsumer.Text = "گزارش مصرف کننده نهایی";
-            tabPageFinalConsumer.UseVisualStyleBackColor = true;
+            dataGridViewTajer.BackgroundColor = SystemColors.ControlLightLight;
+            dataGridViewTajer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewTajer.Columns.AddRange(new DataGridViewColumn[] { CheckBox });
+            dataGridViewTajer.Dock = DockStyle.Fill;
+            dataGridViewTajer.Location = new Point(3, 41);
+            dataGridViewTajer.Margin = new Padding(2, 1, 2, 1);
+            dataGridViewTajer.Name = "dataGridViewTajer";
+            dataGridViewTajer.RowHeadersVisible = false;
+            dataGridViewTajer.RowHeadersWidth = 82;
+            dataGridViewCellStyle1.BackColor = SystemColors.GradientInactiveCaption;
+            dataGridViewTajer.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewTajer.RowTemplate.Height = 55;
+            dataGridViewTajer.Size = new Size(1728, 878);
+            dataGridViewTajer.TabIndex = 14;
             // 
-            // cmbCompany
+            // CheckBox
             // 
-            cmbCompany.FormattingEnabled = true;
-            cmbCompany.Location = new Point(1357, 34);
-            cmbCompany.Name = "cmbCompany";
-            cmbCompany.RightToLeft = RightToLeft.Yes;
-            cmbCompany.Size = new Size(383, 40);
-            cmbCompany.TabIndex = 4;
-            // 
-            // cmbFiscalPeriod
-            // 
-            cmbFiscalPeriod.FormattingEnabled = true;
-            cmbFiscalPeriod.Location = new Point(1149, 34);
-            cmbFiscalPeriod.Name = "cmbFiscalPeriod";
-            cmbFiscalPeriod.RightToLeft = RightToLeft.Yes;
-            cmbFiscalPeriod.Size = new Size(187, 40);
-            cmbFiscalPeriod.TabIndex = 5;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(1096, 34);
-            label1.Name = "label1";
-            label1.RightToLeft = RightToLeft.No;
-            label1.Size = new Size(30, 32);
-            label1.TabIndex = 6;
-            label1.Text = "از";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(903, 37);
-            label2.Name = "label2";
-            label2.RightToLeft = RightToLeft.No;
-            label2.Size = new Size(28, 32);
-            label2.TabIndex = 7;
-            label2.Text = "تا";
-            // 
-            // cmbStock
-            // 
-            cmbStock.FormattingEnabled = true;
-            cmbStock.Location = new Point(458, 34);
-            cmbStock.Name = "cmbStock";
-            cmbStock.RightToLeft = RightToLeft.Yes;
-            cmbStock.Size = new Size(233, 40);
-            cmbStock.TabIndex = 8;
-            // 
-            // btnReferesh
-            // 
-            btnReferesh.BackgroundImage = (Image)resources.GetObject("btnReferesh.BackgroundImage");
-            btnReferesh.BackgroundImageLayout = ImageLayout.Stretch;
-            btnReferesh.Location = new Point(394, 35);
-            btnReferesh.Name = "btnReferesh";
-            btnReferesh.Size = new Size(43, 40);
-            btnReferesh.TabIndex = 9;
-            btnReferesh.UseVisualStyleBackColor = true;
+            CheckBox.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+            CheckBox.FalseValue = "";
+            CheckBox.Frozen = true;
+            CheckBox.HeaderText = "";
+            CheckBox.MinimumWidth = 10;
+            CheckBox.Name = "CheckBox";
+            CheckBox.Resizable = DataGridViewTriState.False;
+            CheckBox.TrueValue = "";
+            CheckBox.Visible = false;
+            CheckBox.Width = 200;
             // 
             // toolStripTajer
             // 
@@ -299,64 +252,35 @@ namespace kashka.Presentation_Layer.Forms
             toolStripLabelLastSendedNo.Name = "toolStripLabelLastSendedNo";
             toolStripLabelLastSendedNo.Size = new Size(0, 32);
             // 
-            // toolStripStatusLabelNetWorkStatus
+            // tabPageFinalConsumer
             // 
-            toolStripStatusLabelNetWorkStatus.ForeColor = Color.DarkOrange;
-            toolStripStatusLabelNetWorkStatus.Name = "toolStripStatusLabelNetWorkStatus";
-            toolStripStatusLabelNetWorkStatus.Size = new Size(220, 32);
-            toolStripStatusLabelNetWorkStatus.Text = "وضعیت اتصال شبکه";
-            toolStripStatusLabelNetWorkStatus.Click += toolStripStatusLabelNetWorkStatus_Click;
+            tabPageFinalConsumer.Controls.Add(dataGridViewFinalConsumer);
+            tabPageFinalConsumer.Controls.Add(toolStripFinalConsumer);
+            tabPageFinalConsumer.Location = new Point(8, 46);
+            tabPageFinalConsumer.Name = "tabPageFinalConsumer";
+            tabPageFinalConsumer.Padding = new Padding(3);
+            tabPageFinalConsumer.Size = new Size(1734, 922);
+            tabPageFinalConsumer.TabIndex = 1;
+            tabPageFinalConsumer.Text = "گزارش مصرف کننده نهایی";
+            tabPageFinalConsumer.UseVisualStyleBackColor = true;
+            tabPageFinalConsumer.Enter += tabPageFinalConsumer_Enter;
             // 
-            // toolStripStatusLabelVersion
+            // dataGridViewFinalConsumer
             // 
-            toolStripStatusLabelVersion.Name = "toolStripStatusLabelVersion";
-            toolStripStatusLabelVersion.Padding = new Padding(0, 0, 50, 0);
-            toolStripStatusLabelVersion.Size = new Size(147, 32);
-            toolStripStatusLabelVersion.Tag = "";
-            toolStripStatusLabelVersion.Text = "نسخه 1.0";
-            // 
-            // btnSend
-            // 
-            btnSend.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnSend.BackgroundImage = (Image)resources.GetObject("btnSend.BackgroundImage");
-            btnSend.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSend.Location = new Point(34, 1079);
-            btnSend.Margin = new Padding(2, 1, 2, 1);
-            btnSend.Name = "btnSend";
-            btnSend.Size = new Size(62, 41);
-            btnSend.TabIndex = 10;
-            btnSend.Tag = "ارسال";
-            btnSend.UseVisualStyleBackColor = true;
-            // 
-            // dataGridViewTajer
-            // 
-            dataGridViewTajer.BackgroundColor = SystemColors.ControlLightLight;
-            dataGridViewTajer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewTajer.Columns.AddRange(new DataGridViewColumn[] { CheckBox });
-            dataGridViewTajer.Dock = DockStyle.Fill;
-            dataGridViewTajer.Location = new Point(3, 41);
-            dataGridViewTajer.Margin = new Padding(2, 1, 2, 1);
-            dataGridViewTajer.Name = "dataGridViewTajer";
-            dataGridViewTajer.RowHeadersVisible = false;
-            dataGridViewTajer.RowHeadersWidth = 82;
+            dataGridViewFinalConsumer.BackgroundColor = SystemColors.ControlLightLight;
+            dataGridViewFinalConsumer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewFinalConsumer.Columns.AddRange(new DataGridViewColumn[] { CheckBoxFinalConsumer });
+            dataGridViewFinalConsumer.Dock = DockStyle.Fill;
+            dataGridViewFinalConsumer.Location = new Point(3, 41);
+            dataGridViewFinalConsumer.Margin = new Padding(2, 1, 2, 1);
+            dataGridViewFinalConsumer.Name = "dataGridViewFinalConsumer";
+            dataGridViewFinalConsumer.RowHeadersVisible = false;
+            dataGridViewFinalConsumer.RowHeadersWidth = 82;
             dataGridViewCellStyle2.BackColor = SystemColors.GradientInactiveCaption;
-            dataGridViewTajer.RowsDefaultCellStyle = dataGridViewCellStyle2;
-            dataGridViewTajer.RowTemplate.Height = 55;
-            dataGridViewTajer.Size = new Size(1728, 878);
-            dataGridViewTajer.TabIndex = 14;
-            // 
-            // CheckBox
-            // 
-            CheckBox.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-            CheckBox.FalseValue = "";
-            CheckBox.Frozen = true;
-            CheckBox.HeaderText = "";
-            CheckBox.MinimumWidth = 10;
-            CheckBox.Name = "CheckBox";
-            CheckBox.Resizable = DataGridViewTriState.False;
-            CheckBox.TrueValue = "";
-            CheckBox.Visible = false;
-            CheckBox.Width = 200;
+            dataGridViewFinalConsumer.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewFinalConsumer.RowTemplate.Height = 55;
+            dataGridViewFinalConsumer.Size = new Size(1728, 878);
+            dataGridViewFinalConsumer.TabIndex = 15;
             // 
             // toolStripFinalConsumer
             // 
@@ -433,6 +357,94 @@ namespace kashka.Presentation_Layer.Forms
             toolStripLabel2.Name = "toolStripLabel2";
             toolStripLabel2.Size = new Size(0, 32);
             // 
+            // cmbCompany
+            // 
+            cmbCompany.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            cmbCompany.FormattingEnabled = true;
+            cmbCompany.Location = new Point(1357, 34);
+            cmbCompany.Name = "cmbCompany";
+            cmbCompany.RightToLeft = RightToLeft.Yes;
+            cmbCompany.Size = new Size(383, 40);
+            cmbCompany.TabIndex = 4;
+            cmbCompany.SelectedIndexChanged += cmbCompany_SelectedIndexChanged;
+            // 
+            // cmbFiscalPeriod
+            // 
+            cmbFiscalPeriod.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            cmbFiscalPeriod.FormattingEnabled = true;
+            cmbFiscalPeriod.Location = new Point(941, 35);
+            cmbFiscalPeriod.Name = "cmbFiscalPeriod";
+            cmbFiscalPeriod.RightToLeft = RightToLeft.Yes;
+            cmbFiscalPeriod.Size = new Size(187, 40);
+            cmbFiscalPeriod.TabIndex = 5;
+            cmbFiscalPeriod.SelectedIndexChanged += cmbFiscalPeriod_SelectedIndexChanged;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(888, 35);
+            label1.Name = "label1";
+            label1.RightToLeft = RightToLeft.No;
+            label1.Size = new Size(30, 32);
+            label1.TabIndex = 6;
+            label1.Text = "از";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(695, 38);
+            label2.Name = "label2";
+            label2.RightToLeft = RightToLeft.No;
+            label2.Size = new Size(28, 32);
+            label2.TabIndex = 7;
+            label2.Text = "تا";
+            // 
+            // cmbStock
+            // 
+            cmbStock.FormattingEnabled = true;
+            cmbStock.Location = new Point(250, 35);
+            cmbStock.Name = "cmbStock";
+            cmbStock.RightToLeft = RightToLeft.Yes;
+            cmbStock.Size = new Size(233, 40);
+            cmbStock.TabIndex = 8;
+            // 
+            // btnReferesh
+            // 
+            btnReferesh.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnReferesh.BackgroundImage = (Image)resources.GetObject("btnReferesh.BackgroundImage");
+            btnReferesh.BackgroundImageLayout = ImageLayout.Stretch;
+            btnReferesh.Location = new Point(1298, 34);
+            btnReferesh.Name = "btnReferesh";
+            btnReferesh.Size = new Size(43, 40);
+            btnReferesh.TabIndex = 9;
+            btnReferesh.UseVisualStyleBackColor = true;
+            // 
+            // btnSend
+            // 
+            btnSend.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnSend.BackgroundImage = (Image)resources.GetObject("btnSend.BackgroundImage");
+            btnSend.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSend.Location = new Point(34, 1079);
+            btnSend.Margin = new Padding(2, 1, 2, 1);
+            btnSend.Name = "btnSend";
+            btnSend.Size = new Size(62, 41);
+            btnSend.TabIndex = 10;
+            btnSend.Tag = "ارسال";
+            btnSend.UseVisualStyleBackColor = true;
+            // 
+            // CheckBoxFinalConsumer
+            // 
+            CheckBoxFinalConsumer.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+            CheckBoxFinalConsumer.FalseValue = "";
+            CheckBoxFinalConsumer.Frozen = true;
+            CheckBoxFinalConsumer.HeaderText = "";
+            CheckBoxFinalConsumer.MinimumWidth = 10;
+            CheckBoxFinalConsumer.Name = "CheckBoxFinalConsumer";
+            CheckBoxFinalConsumer.Resizable = DataGridViewTriState.False;
+            CheckBoxFinalConsumer.TrueValue = "";
+            CheckBoxFinalConsumer.Visible = false;
+            CheckBoxFinalConsumer.Width = 10;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
@@ -455,11 +467,12 @@ namespace kashka.Presentation_Layer.Forms
             tabCtrl.ResumeLayout(false);
             tabPageTajer.ResumeLayout(false);
             tabPageTajer.PerformLayout();
-            tabPageFinalConsumer.ResumeLayout(false);
-            tabPageFinalConsumer.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewTajer).EndInit();
             toolStripTajer.ResumeLayout(false);
             toolStripTajer.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridViewTajer).EndInit();
+            tabPageFinalConsumer.ResumeLayout(false);
+            tabPageFinalConsumer.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewFinalConsumer).EndInit();
             toolStripFinalConsumer.ResumeLayout(false);
             toolStripFinalConsumer.PerformLayout();
             ResumeLayout(false);
@@ -512,5 +525,7 @@ namespace kashka.Presentation_Layer.Forms
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripLabel toolStripLabel1;
         private ToolStripLabel toolStripLabel2;
+        private DataGridView dataGridViewFinalConsumer;
+        private DataGridViewCheckBoxColumn CheckBoxFinalConsumer;
     }
 }

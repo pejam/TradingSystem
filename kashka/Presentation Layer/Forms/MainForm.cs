@@ -3,30 +3,204 @@ using kashka.Services;
 using Microsoft.Data.SqlClient;
 using System.Configuration;
 using kashka.Enums;
+using kashka.Data_Access_Layer.Repositories;
+using System.Windows.Forms;
+using System.Data;
 
 namespace kashka.Presentation_Layer.Forms
 {
     public partial class MainForm : Form
     {
-        internal int userId;
+        private ICodepageConvertor _codepageService;
+        private List<SubmitRetailReport> submitRetailReportList;
+        private List<TransferOwnershipPlaceReport> transferOwnershipPlaceReportList;
 
-        private void ConnectionButton_Click(object sender, EventArgs e)
+        private readonly DataRepository dataRepository;
+
+
+        public MainForm()
         {
-            try
+            InitializeComponent();
+
+            // Initialize the repository with your connection string
+            dataRepository = new DataRepository(
+                ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString);
+
+            _codepageService = new CodepageConvertor();
+
+            LoadControls();
+        }
+
+        private void LoadControls()
+        {
+            cmbCompany.SelectedValue = Properties.Settings.Default.SelectedCompany;
+            cmbFiscalPeriod.SelectedValue = Properties.Settings.Default.SelectedFiscalPeriod;
+            cmbStock.SelectedValue = Properties.Settings.Default.SlecetedStock;
+        }
+
+        private void BindFinalConsumerReportData()
+        {
+            submitRetailReportList = GetFinalConsumerReportData(
+                5, "2022-02-02", "2024-02-02", 5
+            );
+            dataGridViewTajer.DataSource = submitRetailReportList;
+            PrepareFinalConsumerGrid();
+        }
+
+        public List<SubmitRetailReport> GetFinalConsumerReportData(
+            int pFPID, string pSTARTDATE, string pENDDATE, int pSTOCKID
+            )
+        {
+            submitRetailReportList = new List<SubmitRetailReport>();
+            string connectionString = ConfigurationManager
+                .ConnectionStrings["DBConnection"].ConnectionString;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                using (SqlConnection connection = new SqlConnection(
-                    ConfigurationManager.ConnectionStrings["connection"].ConnectionString))
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand("UD_REPORTSPFATORSERIALS", connection))
                 {
-                    connection.Open();
-                    MessageBox.Show("Connected to the database!");
-                    // Perform database operations here
-                    // ...
-                    connection.Close();
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    // Add parameters
+                    command.Parameters.AddWithValue("@pFPID", pFPID);
+                    command.Parameters.AddWithValue("@pSTARTDATE", pSTARTDATE);
+                    command.Parameters.AddWithValue("@pENDDATE", pENDDATE);
+                    command.Parameters.AddWithValue("@pSTOCKID", pSTOCKID);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            SubmitRetailReport reportData = new SubmitRetailReport
+                            {
+                                DocumentDate = reader["تاريخ سند"].ToString(),
+                                InvoiceNumber = reader["شماره صورتحساب"].ToString(),
+                                BuyerNationalId = reader["کد/شناسه ملي خريدار"].ToString(),
+                                BuyerName = reader["نام خريدار"].ToString(),
+                                MobileNumber = reader["تلفن همراه"].ToString(),
+                                SourceWarehousePostalCode = reader["کد پستي انبار مبدا"].ToString(),
+                                DocumentDescription = reader["شرح سند"].ToString(),
+                                ItemId = reader["شناسه کالا"].ToString(),
+                                TrackingId = reader["شناسه رهگيري"].ToString(),
+                                UnitPrice = Convert.ToDecimal(reader["مبلغ واحد"])
+                            };
+
+                            submitRetailReportList.Add(CodePageReflection<SubmitRetailReport>.fromTadbir(_codepageService, reportData));
+                        }
+                    }
                 }
             }
-            catch (Exception ex)
+
+            return submitRetailReportList;
+        }
+
+        private void BindTajerReportData()
+        {
+            transferOwnershipPlaceReportList = GetTajerReportData(
+                5, "2022-02-02", "2024-02-02", 5
+            );
+            dataGridViewTajer.DataSource = transferOwnershipPlaceReportList;
+            PrepareTajerGrid();
+        }
+
+        public List<TransferOwnershipPlaceReport> GetTajerReportData(
+            int pFPID, string pSTARTDATE, string pENDDATE, int pStockId
+            )
+        {
+            transferOwnershipPlaceReportList = new List<TransferOwnershipPlaceReport>();
+
+            string connectionString = ConfigurationManager
+                .ConnectionStrings["DBConnection"].ConnectionString;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                MessageBox.Show("Error: " + ex.Message);
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand("UD_REPORTSPFATOR", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    // Add parameters
+                    command.Parameters.AddWithValue("@pFPID", pFPID);
+                    command.Parameters.AddWithValue("@pSTARTDATE", pSTARTDATE);
+                    command.Parameters.AddWithValue("@pENDDATE", pENDDATE);
+                    command.Parameters.AddWithValue("@pStockId", pStockId);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            TransferOwnershipPlaceReport reportData = new TransferOwnershipPlaceReport();
+
+                            // Map columns to properties of YourReportDataClass
+                            reportData.DocumentDate = reader["تاريخ سند"].ToString();
+                            reportData.InvoiceNumber = reader["شماره صورتحساب"].ToString();
+                            reportData.BuyerNationalId = reader["کد/شناسه ملي خريدار"].ToString();
+                            reportData.BuyerBusinessRoleCode = reader["کد نقش تجاري خريدار"].ToString();
+                            reportData.BuyerName = reader["نام خريدار"].ToString();
+                            reportData.MobileNumber = reader["تلفن همراه"].ToString();
+                            reportData.SourceWarehousePostalCode = reader["کد پستي انبار مبدا"].ToString();
+                            reportData.DestinationWarehousePostalCode = reader["کد پستي انبار مقصد"].ToString();
+                            reportData.StockExchangeContractNumber = reader["شماره قرارداد بورس"].ToString();
+                            reportData.TransportStatus = reader["وضعيت حمل"].ToString();
+                            reportData.WaybillNumber = reader["شماره بارنامه"].ToString();
+                            reportData.WaybillDate = reader["تاريخ بارنامه"].ToString();
+                            reportData.WaybillSerial = reader["سريال بارنامه"].ToString();
+                            reportData.DocumentDescription = reader["شرح سند"].ToString();
+                            reportData.ItemId = reader["شناسه کالا"].ToString();
+                            reportData.Quantity = Convert.ToDecimal(reader["تعداد / مقدار"]);
+                            reportData.UnitPrice = Convert.ToDecimal(reader["مبلغ واحد"]);
+                            reportData.DiscountAmount = Convert.ToDecimal(reader["مبلغ تخفيف"]);
+                            reportData.TaxAndDutyAmount = Convert.ToDecimal(reader["مبلغ ماليات و عوارض"]);
+
+                            transferOwnershipPlaceReportList.Add(CodePageReflection<TransferOwnershipPlaceReport>.fromTadbir(_codepageService, reportData));
+                        }
+                    }
+                }
+            }
+
+            return transferOwnershipPlaceReportList;
+        }
+
+        public void PrepareTajerGrid()
+        {
+            dataGridViewTajer.Columns["CheckBox"].Visible = true;
+            dataGridViewTajer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+            dataGridViewTajer.AllowUserToResizeColumns = true;
+            dataGridViewTajer.ColumnHeadersHeight = 40; // Increase or decrease the value to adjust the height
+            dataGridViewTajer.RowTemplate.Height = 35;
+            dataGridViewTajer.AllowUserToResizeRows = true;
+            dataGridViewTajer.AllowUserToAddRows = false;
+            dataGridViewTajer.DefaultCellStyle.Font = new Font("Arial", 9);
+
+            foreach (KeyValuePair<string, GridRowModel> HGI in Dics.TajerGridInfo)
+            {
+                if (dataGridViewTajer.Columns[HGI.Key] == null) continue;
+                dataGridViewTajer.Columns[HGI.Key].HeaderText = HGI.Value.Title;
+                dataGridViewTajer.Columns[HGI.Key].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+                dataGridViewTajer.Columns[HGI.Key].Visible = (!HGI.Value.IsDetail || Properties.Settings.Default.ShowDetails);
+            }
+        }
+
+        public void PrepareFinalConsumerGrid()
+        {
+            dataGridViewFinalConsumer.Columns["CheckBoxFinalConsumer"].Visible = true;
+            dataGridViewFinalConsumer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+            dataGridViewFinalConsumer.AllowUserToResizeColumns = true;
+            dataGridViewFinalConsumer.ColumnHeadersHeight = 40; // Increase or decrease the value to adjust the height
+            dataGridViewFinalConsumer.RowTemplate.Height = 35;
+            dataGridViewFinalConsumer.AllowUserToResizeRows = true;
+            dataGridViewFinalConsumer.AllowUserToAddRows = false;
+            dataGridViewFinalConsumer.DefaultCellStyle.Font = new Font("Arial", 9);
+
+            foreach (KeyValuePair<string, GridRowModel> HGI in Dics.TajerGridInfo)
+            {
+                if (dataGridViewFinalConsumer.Columns[HGI.Key] == null) continue;
+                dataGridViewFinalConsumer.Columns[HGI.Key].HeaderText = HGI.Value.Title;
+                dataGridViewFinalConsumer.Columns[HGI.Key].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+                dataGridViewFinalConsumer.Columns[HGI.Key].Visible = (!HGI.Value.IsDetail || Properties.Settings.Default.ShowDetails);
             }
         }
 
@@ -101,9 +275,28 @@ namespace kashka.Presentation_Layer.Forms
             }
         }
 
-        private void toolStripStatusLabelNetWorkStatus_Click(object sender, EventArgs e)
+
+        private void tabPageTajer_Enter(object sender, EventArgs e)
+        {
+            BindTajerReportData();
+        }
+
+        private void tabPageFinalConsumer_Enter(object sender, EventArgs e)
+        {
+            BindFinalConsumerReportData();
+        }
+
+
+
+        private void cmbCompany_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
+
+        private void cmbFiscalPeriod_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }
