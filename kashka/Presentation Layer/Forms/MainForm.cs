@@ -33,9 +33,9 @@ namespace kashka.Presentation_Layer.Forms
 
         private void LoadControls()
         {
-            cmbCompany.SelectedValue = Properties.Settings.Default.SelectedCompany;
+            /*cmbCompany.SelectedValue = Properties.Settings.Default.SelectedCompany;
             cmbFiscalPeriod.SelectedValue = Properties.Settings.Default.SelectedFiscalPeriod;
-            cmbStock.SelectedValue = Properties.Settings.Default.SlecetedStock;
+            cmbStock.SelectedValue = Properties.Settings.Default.SlecetedStock;*/
         }
 
         private void BindFinalConsumerReportData()

@@ -106,5 +106,17 @@ namespace kashka.Properties {
                 this["StockRoomId"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowDetails {
+            get {
+                return ((bool)(this["ShowDetails"]));
+            }
+            set {
+                this["ShowDetails"] = value;
+            }
+        }
     }
 }
