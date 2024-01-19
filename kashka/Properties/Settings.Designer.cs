@@ -22,5 +22,89 @@ namespace kashka.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int WorkSpaceId {
+            get {
+                return ((int)(this["WorkSpaceId"]));
+            }
+            set {
+                this["WorkSpaceId"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string WorkSpaceName {
+            get {
+                return ((string)(this["WorkSpaceName"]));
+            }
+            set {
+                this["WorkSpaceName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string WorkSpaceEnName {
+            get {
+                return ((string)(this["WorkSpaceEnName"]));
+            }
+            set {
+                this["WorkSpaceEnName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FiscalPeriodName {
+            get {
+                return ((string)(this["FiscalPeriodName"]));
+            }
+            set {
+                this["FiscalPeriodName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int FiscalPeriodId {
+            get {
+                return ((int)(this["FiscalPeriodId"]));
+            }
+            set {
+                this["FiscalPeriodId"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string StockRoomName {
+            get {
+                return ((string)(this["StockRoomName"]));
+            }
+            set {
+                this["StockRoomName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int StockRoomId {
+            get {
+                return ((int)(this["StockRoomId"]));
+            }
+            set {
+                this["StockRoomId"] = value;
+            }
+        }
     }
 }

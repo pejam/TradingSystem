@@ -23,7 +23,7 @@ namespace kashka.Business_Logic_Layer.Models
         /// <summary>
         /// مسیر پایگاه داده 1
         /// </summary>
-        [CodePage(NeedsToConvert = true)] 
+        [CodePage(NeedsToConvert = false)] 
         public string MdbPath { get; set; }
 
         /// <summary>

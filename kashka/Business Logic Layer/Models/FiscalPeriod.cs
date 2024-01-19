@@ -18,7 +18,7 @@ namespace kashka.Business_Logic_Layer.Models
         /// شماره دوره مالی
         /// </summary>
         [CodePage(NeedsToConvert = false)]
-        public short FPNo { get; set; }
+        public int FPNo { get; set; }
 
         /// <summary>
         /// نام دوره مالی
@@ -48,19 +48,19 @@ namespace kashka.Business_Logic_Layer.Models
         /// نوع سرویس
         /// </summary>
         [CodePage(NeedsToConvert = false)]
-        public short SType { get; set; }
+        public int SType { get; set; }
 
         /// <summary>
         /// لاگ رزرو
         /// </summary>
         [CodePage(NeedsToConvert = false)]
-        public short LRes { get; set; }
+        public int LRes { get; set; }
 
         /// <summary>
         /// دیتا رزرو
         /// </summary>
         [CodePage(NeedsToConvert = false)] 
-        public float DRes { get; set; }
+        public double DRes { get; set; }
 
         /// <summary>
         /// زمان رزرو

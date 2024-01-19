@@ -1,4 +1,5 @@
-﻿using kashka.Business_Logic_Layer.Models;
+﻿using kashka.Business_Logic_Layer;
+using kashka.Business_Logic_Layer.Models;
 using kashka.Enums;
 using kashka.Services;
 using Microsoft.Data.SqlClient;
@@ -13,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace kashka.Presentation_Layer.Forms
@@ -20,16 +22,365 @@ namespace kashka.Presentation_Layer.Forms
     public partial class Sample : Form
     {
         private ICodepageConvertor _codepageService;
+        private List<WorkSpace> workSpaceList;
         private List<SubmitRetailReport> submitRetailReportList;
         private List<TransferOwnershipPlaceReport> transferOwnershipPlaceReportList;
+        private string _connectionString;
 
 
         public Sample()
         {
             InitializeComponent();
             _codepageService = new CodepageConvertor();
-            //BindSubmitRetailReportData();
+
+            InitializeVariables();
         }
+
+
+        private void InitializeVariables()
+        {
+            if (!string.IsNullOrEmpty(Properties.Settings.Default.WorkSpaceName))
+            {
+                txtWorkSpace.Text = Properties.Settings.Default.WorkSpaceName;
+                _connectionString = ReplaceDatabaseName(
+                    ConfigurationManager.ConnectionStrings["DBConnection"].ConnectionString,
+                    Properties.Settings.Default.WorkSpaceEnName);
+
+                if (!string.IsNullOrEmpty(Properties.Settings.Default.FiscalPeriodName))
+                {
+                    txtFiscalPeriod.Text = Properties.Settings.Default.FiscalPeriodName;
+                }
+
+                if (!string.IsNullOrEmpty(Properties.Settings.Default.StockRoomName))
+                {
+                    txtStockRoom.Text = Properties.Settings.Default.StockRoomName;
+                }
+            }
+        }
+
+        private void btnWorkSpace_Click(object sender, EventArgs e)
+        {
+            WorkSpace workSpace = ShowListDialog<WorkSpace>(GetWorkSpaceData());
+            if (workSpace != null && (
+                    Properties.Settings.Default.WorkSpaceId != workSpace.Id &&
+                        !Properties.Settings.Default.WorkSpaceName.Equals(workSpace.Name)
+                ))
+            {
+                Properties.Settings.Default.WorkSpaceId = workSpace.Id;
+                Properties.Settings.Default.WorkSpaceName = workSpace.Name;
+                Properties.Settings.Default.WorkSpaceEnName =
+                    GetFileNameWithExtension(workSpace.MdbPath);
+                Properties.Settings.Default.Save();
+
+                _connectionString = ReplaceDatabaseName(
+                    ConfigurationManager.ConnectionStrings["DBConnection"].ConnectionString,
+                    Properties.Settings.Default.WorkSpaceEnName);
+
+                txtWorkSpace.Text = workSpace.Name;
+
+                InitFiscalPeriod(null);
+                InitStockRoom(null);
+            }
+        }
+
+        private void btnFiscalPeriod_Click(object sender, EventArgs e)
+        {
+            FiscalPeriod fiscalPeriod = ShowListDialog<FiscalPeriod>(GetFiscalPeriodData());
+            if (fiscalPeriod != null)
+            {
+                InitFiscalPeriod(fiscalPeriod);
+                txtFiscalPeriod.Text = fiscalPeriod.Name;
+            }
+        }
+
+        private void InitFiscalPeriod(FiscalPeriod fiscalPeriod)
+        {
+            if (fiscalPeriod != null)
+            {
+                Properties.Settings.Default.FiscalPeriodId = fiscalPeriod.Id;
+                Properties.Settings.Default.FiscalPeriodName = fiscalPeriod.Name;
+                txtFiscalPeriod.Text = fiscalPeriod.Name;
+            }
+            else
+            {
+                Properties.Settings.Default.FiscalPeriodId = 0;
+                Properties.Settings.Default.FiscalPeriodName = null;
+                txtFiscalPeriod.Text = null;
+            }
+        }
+
+        private void btnStockRoom_Click(object sender, EventArgs e)
+        {
+            StockRoom stockRoom = ShowListDialog<StockRoom>(GetStockRoomData());
+            if (stockRoom != null)
+            {
+                InitStockRoom(stockRoom);
+                txtStockRoom.Text = stockRoom.Name;
+            }
+        }
+
+        private void InitStockRoom(StockRoom stockRoom)
+        {
+            if (stockRoom != null)
+            {
+                Properties.Settings.Default.StockRoomId = stockRoom.Id;
+                Properties.Settings.Default.StockRoomName = stockRoom.Name;
+                txtStockRoom.Text = stockRoom.Name;
+            }
+            else
+            {
+                Properties.Settings.Default.StockRoomId = 0;
+                Properties.Settings.Default.StockRoomName = null;
+                txtStockRoom.Text = null;
+            }
+        }
+
+        private T ShowListDialog<T>(List<T> itemList) where T : class
+        {
+            using (var listDialog = new List())
+            {
+                listDialog.SetItemList(itemList);
+
+                DialogResult result = listDialog.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    return listDialog.SelectedListItem as T;
+                }
+            }
+
+            return null;
+        }
+
+        static string GetFileNameWithExtension(string filePath)
+        {
+            // Get the filename without extension
+            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
+
+            // Get the extension
+            string extension = Path.GetExtension(filePath);
+
+            // Concatenate the filename and extension
+            string fileNameWithExtension = fileNameWithoutExtension;
+
+            return fileNameWithExtension;
+        }
+
+        static string ReplaceDatabaseName(string connectionString, string newDatabaseName)
+        {
+
+            int databaseIndex = connectionString.IndexOf("Database=");
+
+            if (databaseIndex >= 0)
+            {
+                int endIndex = connectionString.IndexOf(';', databaseIndex);
+
+                if (endIndex < 0)
+                {
+                    endIndex = connectionString.Length;
+                }
+
+
+                string oldDatabaseName = connectionString.Substring(databaseIndex + "Database=".Length, endIndex - (databaseIndex + "Database=".Length));
+
+                return connectionString.Replace($"Database={oldDatabaseName}", $"Database={newDatabaseName}");
+            }
+
+            return connectionString;
+        }
+
+        private List<WorkSpace> GetWorkSpaceData()
+        {
+            // Retrieve the connection string from the app.config
+            string connectionString = ConfigurationManager
+                .ConnectionStrings["SysConnection"].ConnectionString;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    List<WorkSpace> workspaces = new List<WorkSpace>();
+
+                    string query = "SELECT * FROM [__Sys__].[dbo].[__WorkSpace__]";
+
+                    using (SqlDataReader reader = new SqlCommand(query, connection).ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            WorkSpace workspace = new WorkSpace();
+
+                            // Map each property from the reader to the WorkSpace class
+                            workspace.Id = Convert.ToInt32(reader["Id"]);
+                            workspace.Name = reader["Name"].ToString();
+                            workspace.MdbPath = reader["MdbPath"].ToString();
+                            workspace.MdbPath1 = reader["MdbPath1"].ToString();
+                            workspace.MdbPath2 = reader["MdbPath2"].ToString();
+                            workspace.MdbPath3 = reader["MdbPath3"].ToString();
+                            workspace.MdbPath4 = reader["MdbPath4"].ToString();
+                            workspace.WSType = Convert.ToInt32(reader["WSType"]);
+
+                            workspaces.Add(
+                                CodePageReflection<WorkSpace>.fromTadbir(_codepageService, workspace));
+                        }
+                    }
+
+                    return workspaces;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error connecting to the database: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return null;
+                }
+            }
+        }
+
+        private List<FiscalPeriod> GetFiscalPeriodData()
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    List<FiscalPeriod> fiscalPeriods = new List<FiscalPeriod>();
+
+                    string query = "SELECT * FROM __FiscalPeriod__ WHERE Id > 0";
+
+                    using (SqlDataReader reader = new SqlCommand(query, connection).ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            FiscalPeriod fiscalPeriod = new FiscalPeriod();
+
+                            // Map each property from the reader to the WorkSpace class
+                            fiscalPeriod.Id = Convert.ToInt32(reader["Id"]);
+                            fiscalPeriod.FPNo = Convert.ToInt32(reader["FPNo"]);
+                            fiscalPeriod.Name = reader["Name"].ToString();
+                            fiscalPeriod.StartDate = (DateTime)reader["StartDate"];
+                            fiscalPeriod.EndDate = (DateTime)reader["EndDate"];
+                            fiscalPeriod.FPDesc = reader["FPDesc"].ToString();
+                            fiscalPeriod.SType = Convert.ToInt32(reader["SType"]);
+                            /*fiscalPeriod.LRes = Convert.ToInt32(reader["LRes"]);
+                            fiscalPeriod.DRes = Convert.ToDouble(reader["DRes"]);
+                            fiscalPeriod.TRes = reader["TRes"].ToString();*/
+
+                            fiscalPeriods.Add(
+                                CodePageReflection<FiscalPeriod>.fromTadbir(_codepageService, fiscalPeriod));
+                        }
+                    }
+
+                    return fiscalPeriods;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error connecting to the database: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return null;
+                }
+            }
+        }
+
+        private List<StockRoom> GetStockRoomData()
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    List<StockRoom> stockRooms = new List<StockRoom>();
+
+                    string query = $"SELECT * FROM __StockRoom__ WHERE Id > 0 AND " +
+                                   $"FPId = {Properties.Settings.Default.FiscalPeriodId}";
+
+                    using (SqlDataReader reader = new SqlCommand(query, connection).ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            StockRoom stockRoom = new StockRoom();
+
+                            stockRoom.Id = Convert.ToInt32(reader["Id"]);
+                            stockRoom.Code = Convert.ToInt32(reader["Code"]);
+                            stockRoom.Name = reader["Name"].ToString();
+                            stockRoom.ManagerName = reader["ManagerName"].ToString();
+                            stockRoom.SRDesc = reader["SRDesc"].ToString();
+                            /*stockRoom.LRes = Convert.ToInt32(reader["LRes"]);
+                            stockRoom.DRes = Convert.ToDouble(reader["DRes"]);
+                            stockRoom.TRes = reader["TRes"].ToString();*/
+                            stockRoom.AccountId = reader["AccountId"].ToString();
+                            stockRoom.FPId = Convert.ToInt32(reader["FPId"]);
+                            stockRoom.FAccId = Convert.ToInt32(reader["FAccId"]);
+                            stockRoom.CCId = Convert.ToInt32(reader["CCId"]);
+                            stockRoom.PrjId = Convert.ToInt32(reader["PrjId"]);
+
+                            stockRooms.Add(
+                                CodePageReflection<StockRoom>.fromTadbir(_codepageService, stockRoom));
+                        }
+                    }
+
+                    return stockRooms;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error connecting to the database: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return null;
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         private void BindSubmitRetailReportData()
         {
@@ -340,5 +691,12 @@ namespace kashka.Presentation_Layer.Forms
 
             return gregorianDateTime;
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
     }
 }
