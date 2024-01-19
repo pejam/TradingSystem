@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,7 +42,7 @@ namespace kashka.Presentation_Layer.Forms
 
         public List<SubmitRetailReport> GetSubmitRetailReportData(
             int pFPID, string pSTARTDATE, string pENDDATE, int pSTOCKID
-            )
+        )
         {
             submitRetailReportList = new List<SubmitRetailReport>();
             string connectionString = ConfigurationManager
@@ -79,7 +80,8 @@ namespace kashka.Presentation_Layer.Forms
                                 UnitPrice = Convert.ToDecimal(reader["مبلغ واحد"])
                             };
 
-                            submitRetailReportList.Add(CodePageReflection<SubmitRetailReport>.fromTadbir(_codepageService, reportData));
+                            submitRetailReportList.Add(
+                                CodePageReflection<SubmitRetailReport>.fromTadbir(_codepageService, reportData));
                         }
                     }
                 }
@@ -99,7 +101,7 @@ namespace kashka.Presentation_Layer.Forms
 
         public List<TransferOwnershipPlaceReport> GetTransferOwnershipPlaceReportData(
             int pFPID, string pSTARTDATE, string pENDDATE, int pStockId
-            )
+        )
         {
             transferOwnershipPlaceReportList = new List<TransferOwnershipPlaceReport>();
 
@@ -147,7 +149,9 @@ namespace kashka.Presentation_Layer.Forms
                             reportData.DiscountAmount = Convert.ToDecimal(reader["مبلغ تخفيف"]);
                             reportData.TaxAndDutyAmount = Convert.ToDecimal(reader["مبلغ ماليات و عوارض"]);
 
-                            transferOwnershipPlaceReportList.Add(CodePageReflection<TransferOwnershipPlaceReport>.fromTadbir(_codepageService, reportData));
+                            transferOwnershipPlaceReportList.Add(
+                                CodePageReflection<TransferOwnershipPlaceReport>.fromTadbir(_codepageService,
+                                    reportData));
                         }
                     }
                 }
@@ -258,7 +262,8 @@ namespace kashka.Presentation_Layer.Forms
                 else
                 {
                     // Handle API error
-                    MessageBox.Show($"API Error - Result Code: {result.ResultCode}, Result Message: {result.ResultMessage}");
+                    MessageBox.Show(
+                        $"API Error - Result Code: {result.ResultCode}, Result Message: {result.ResultMessage}");
                 }
             }
             catch (HttpRequestException ex)
@@ -293,6 +298,47 @@ namespace kashka.Presentation_Layer.Forms
 
                 BindTransferOwnershipPlaceReportData();
             }
+        }
+
+        private void btnTajer_Click(object sender, EventArgs e)
+        {
+            DateTime? fromDate = fromDatePicker.GeorgianDate;
+            DateTime? untilDate = untilDatePicker.GeorgianDate;
+
+            if (fromDate == null || untilDate == null)
+            {
+                MessageBox.Show("لطفا تاریخ شروع و پایان را وارد کنید.", "فیلدها خالیست",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                DateTime inputDate = DateTime.Parse(fromDate.ToString());
+                string formattedDate = inputDate.ToString("yyyy-MM-dd");
+                MessageBox.Show(formattedDate);
+
+                DateTime date = ToMiladi("1402/10/29");
+                string fDate = inputDate.ToString("yyyy-MM-dd");
+                MessageBox.Show(fDate);
+            }
+
+        }
+
+        public DateTime ToMiladi(string shamsiDate)
+        {
+            if (shamsiDate == null)
+            {
+                return DateTime.UtcNow;
+            }
+
+            var persianCalendar = new PersianCalendar();
+
+            int year = int.Parse(shamsiDate.Substring(0, 4));
+            int month = int.Parse(shamsiDate.Substring(5, 2));
+            int day = int.Parse(shamsiDate.Substring(8, 2));
+
+            DateTime gregorianDateTime = persianCalendar.ToDateTime(year, month, day, 0, 0, 0, 0).AddHours(12);
+
+            return gregorianDateTime;
         }
     }
 }
