@@ -13,10 +13,10 @@
     <Folder Include="Res\" />
     <Folder Include="Presentation Layer\Controls\" />
     <Folder Include="Utilities\Extensions\" />
-    <Folder Include="Utilities\Helpers\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MD.PersianDateTime.Core" Version="2.3.5" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.2" />
     <PackageReference Include="Microsoft.SqlServer.Server" Version="1.0.0" />
     <PackageReference Include="PersianDatePickerWindowsFrom" Version="3.0.1" />

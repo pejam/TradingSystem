@@ -119,7 +119,7 @@ namespace kashka.Presentation_Layer.Forms
             // 
             toolStripStatusLabelVersion.Name = "toolStripStatusLabelVersion";
             toolStripStatusLabelVersion.Padding = new Padding(0, 0, 50, 0);
-            toolStripStatusLabelVersion.Size = new Size(120, 21);
+            toolStripStatusLabelVersion.Size = new Size(114, 21);
             toolStripStatusLabelVersion.Tag = "";
             toolStripStatusLabelVersion.Text = "نسخه 1.0";
             // 
@@ -190,6 +190,7 @@ namespace kashka.Presentation_Layer.Forms
             // 
             // toolStripTajer
             // 
+            toolStripTajer.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             toolStripTajer.ImageScalingSize = new Size(25, 25);
             toolStripTajer.Items.AddRange(new ToolStripItem[] { toolStripButtonDeselectAll, toolStripButtonSellectAll, toolStripButtonDeleteInvoices, toolStripButtonRefreshDB, toolStripButtonShowDetails, toolStripSeparator1, toolStripLabelLastSended, toolStripLabelLastSendedNo });
             toolStripTajer.Location = new Point(2, 2);
