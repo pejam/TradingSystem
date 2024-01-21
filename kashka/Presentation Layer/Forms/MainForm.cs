@@ -291,6 +291,7 @@ namespace kashka.Presentation_Layer.Forms
             int pFPID, string pSTARTDATE, string pENDDATE, int pSTOCKID
             )
         {
+
             submitRetailReportList = GetFinalConsumerReportData(
                 pFPID, pSTARTDATE, pENDDATE, pSTOCKID
             );
@@ -315,7 +316,7 @@ namespace kashka.Presentation_Layer.Forms
 
         public void PrepareTajerGrid()
         {
-            dataGridViewTajer.Columns["CheckBox"].Visible = true;
+            dataGridViewTajer.Columns["CheckBox"].Visible = false;
             dataGridViewTajer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
             dataGridViewTajer.AllowUserToResizeColumns = true;
             dataGridViewTajer.ColumnHeadersHeight = 40; // Increase or decrease the value to adjust the height
@@ -335,7 +336,7 @@ namespace kashka.Presentation_Layer.Forms
 
         public void PrepareFinalConsumerGrid()
         {
-            dataGridViewFinalConsumer.Columns["CheckBoxFinalConsumer"].Visible = true;
+            dataGridViewFinalConsumer.Columns["CheckBoxFinalConsumer"].Visible = false;
             dataGridViewFinalConsumer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
             dataGridViewFinalConsumer.AllowUserToResizeColumns = true;
             dataGridViewFinalConsumer.ColumnHeadersHeight = 40; // Increase or decrease the value to adjust the height
@@ -592,8 +593,14 @@ namespace kashka.Presentation_Layer.Forms
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
+                        progressBar.Value = 0;
+                        this.Cursor = Cursors.WaitCursor;
+
                         while (reader.Read())
                         {
+                            if (progressBar.Value <= 95)
+                                progressBar.Value += 5;
+
                             TransferOwnershipPlaceReport reportData = new TransferOwnershipPlaceReport();
 
                             // Map columns to properties of YourReportDataClass
@@ -619,6 +626,7 @@ namespace kashka.Presentation_Layer.Forms
 
                             transferOwnershipPlaceReportList.Add(CodePageReflection<TransferOwnershipPlaceReport>.fromTadbir(_codepageService, reportData));
                         }
+                        this.Cursor = Cursors.Default;
                     }
                 }
             }
@@ -648,8 +656,14 @@ namespace kashka.Presentation_Layer.Forms
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
+                        progressBar.Value = 0;
+                        this.Cursor = Cursors.WaitCursor;
+
                         while (reader.Read())
                         {
+                            if (progressBar.Value <= 95)
+                                progressBar.Value += 5;
+
                             SubmitRetailReport reportData = new SubmitRetailReport
                             {
                                 DocumentDate = reader["تاريخ سند"].ToString(),
@@ -666,6 +680,7 @@ namespace kashka.Presentation_Layer.Forms
 
                             submitRetailReportList.Add(CodePageReflection<SubmitRetailReport>.fromTadbir(_codepageService, reportData));
                         }
+                        this.Cursor = Cursors.Default;
                     }
                 }
             }

@@ -54,7 +54,6 @@
             Name = "List";
             RightToLeft = RightToLeft.Yes;
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "List";
             ResumeLayout(false);
         }
 

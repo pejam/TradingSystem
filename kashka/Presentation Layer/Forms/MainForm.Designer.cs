@@ -84,6 +84,7 @@ namespace kashka.Presentation_Layer.Forms
             lblUntil = new Label();
             untilDatePicker = new PersianDatePicker();
             btnReport = new Button();
+            progressBar = new ProgressBar();
             statusStrip1.SuspendLayout();
             tabCtrl.SuspendLayout();
             tabPageFinalConsumer.SuspendLayout();
@@ -160,6 +161,7 @@ namespace kashka.Presentation_Layer.Forms
             dataGridViewCellStyle1.BackColor = SystemColors.GradientInactiveCaption;
             dataGridViewFinalConsumer.RowsDefaultCellStyle = dataGridViewCellStyle1;
             dataGridViewFinalConsumer.RowTemplate.Height = 55;
+            dataGridViewFinalConsumer.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewFinalConsumer.Size = new Size(1729, 588);
             dataGridViewFinalConsumer.TabIndex = 15;
             // 
@@ -279,6 +281,7 @@ namespace kashka.Presentation_Layer.Forms
             dataGridViewCellStyle2.BackColor = SystemColors.GradientInactiveCaption;
             dataGridViewTajer.RowsDefaultCellStyle = dataGridViewCellStyle2;
             dataGridViewTajer.RowTemplate.Height = 55;
+            dataGridViewTajer.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewTajer.Size = new Size(1729, 588);
             dataGridViewTajer.TabIndex = 14;
             // 
@@ -377,7 +380,7 @@ namespace kashka.Presentation_Layer.Forms
             // 
             btnSend.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnSend.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSend.Location = new Point(23, 952);
+            btnSend.Location = new Point(23, 957);
             btnSend.Margin = new Padding(1, 2, 1, 2);
             btnSend.Name = "btnSend";
             btnSend.RightToLeft = RightToLeft.Yes;
@@ -390,6 +393,7 @@ namespace kashka.Presentation_Layer.Forms
             // 
             // txtStockRoom
             // 
+            txtStockRoom.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             txtStockRoom.Location = new Point(1242, 192);
             txtStockRoom.Margin = new Padding(4, 5, 4, 5);
             txtStockRoom.Name = "txtStockRoom";
@@ -399,6 +403,7 @@ namespace kashka.Presentation_Layer.Forms
             // 
             // txtFiscalPeriod
             // 
+            txtFiscalPeriod.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             txtFiscalPeriod.Location = new Point(1242, 114);
             txtFiscalPeriod.Margin = new Padding(4, 5, 4, 5);
             txtFiscalPeriod.Name = "txtFiscalPeriod";
@@ -408,6 +413,7 @@ namespace kashka.Presentation_Layer.Forms
             // 
             // btnStockRoom
             // 
+            btnStockRoom.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnStockRoom.Location = new Point(1024, 184);
             btnStockRoom.Margin = new Padding(4, 5, 4, 5);
             btnStockRoom.Name = "btnStockRoom";
@@ -419,6 +425,7 @@ namespace kashka.Presentation_Layer.Forms
             // 
             // btnFiscalPeriod
             // 
+            btnFiscalPeriod.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnFiscalPeriod.Location = new Point(1024, 107);
             btnFiscalPeriod.Margin = new Padding(4, 5, 4, 5);
             btnFiscalPeriod.Name = "btnFiscalPeriod";
@@ -430,6 +437,7 @@ namespace kashka.Presentation_Layer.Forms
             // 
             // txtWorkSpace
             // 
+            txtWorkSpace.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             txtWorkSpace.Location = new Point(1242, 41);
             txtWorkSpace.Margin = new Padding(4, 5, 4, 5);
             txtWorkSpace.Name = "txtWorkSpace";
@@ -439,6 +447,7 @@ namespace kashka.Presentation_Layer.Forms
             // 
             // btnWorkSpace
             // 
+            btnWorkSpace.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnWorkSpace.Location = new Point(1024, 34);
             btnWorkSpace.Margin = new Padding(4, 5, 4, 5);
             btnWorkSpace.Name = "btnWorkSpace";
@@ -450,6 +459,7 @@ namespace kashka.Presentation_Layer.Forms
             // 
             // lblStockRoom
             // 
+            lblStockRoom.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblStockRoom.AutoSize = true;
             lblStockRoom.Location = new Point(1658, 197);
             lblStockRoom.Margin = new Padding(4, 0, 4, 0);
@@ -460,6 +470,7 @@ namespace kashka.Presentation_Layer.Forms
             // 
             // lblFiscalPeriod
             // 
+            lblFiscalPeriod.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblFiscalPeriod.AutoSize = true;
             lblFiscalPeriod.Location = new Point(1600, 119);
             lblFiscalPeriod.Margin = new Padding(4, 0, 4, 0);
@@ -470,6 +481,7 @@ namespace kashka.Presentation_Layer.Forms
             // 
             // lblWorkSpace
             // 
+            lblWorkSpace.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblWorkSpace.AutoSize = true;
             lblWorkSpace.Location = new Point(1635, 46);
             lblWorkSpace.Margin = new Padding(4, 0, 4, 0);
@@ -541,11 +553,20 @@ namespace kashka.Presentation_Layer.Forms
             btnReport.UseVisualStyleBackColor = true;
             btnReport.Click += btnReport_Click;
             // 
+            // progressBar
+            // 
+            progressBar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            progressBar.Location = new Point(22, 942);
+            progressBar.Name = "progressBar";
+            progressBar.Size = new Size(1733, 10);
+            progressBar.TabIndex = 35;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1762, 1061);
+            Controls.Add(progressBar);
             Controls.Add(btnReport);
             Controls.Add(btnSend);
             Controls.Add(fromDatePicker);
@@ -565,7 +586,7 @@ namespace kashka.Presentation_Layer.Forms
             Controls.Add(statusStrip1);
             Margin = new Padding(4, 5, 4, 5);
             Name = "MainForm";
-            Text = "MainForm";
+            StartPosition = FormStartPosition.CenterScreen;
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             tabCtrl.ResumeLayout(false);
@@ -638,5 +659,6 @@ namespace kashka.Presentation_Layer.Forms
         private Label lblUntil;
         private PersianDatePicker untilDatePicker;
         private Button btnReport;
+        private ProgressBar progressBar;
     }
 }
