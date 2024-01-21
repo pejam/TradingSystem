@@ -188,6 +188,248 @@ namespace kashka.Presentation_Layer.Forms
             return connectionString;
         }
 
+        private void btnReport_Click(object sender, EventArgs e)
+        {
+            string errorMessage = ValidateParameters();
+            if (errorMessage.IsNullOrEmpty())
+            {
+                string fromDateGeorgian;
+                string untilDateGeorgian;
+
+                if (fromDatePicker.PersianDate.Year < 2000)
+                {
+                    PersianCalendar p = new PersianCalendar();
+                    DateTime x = p.ToDateTime(
+                        fromDatePicker.PersianDate.Year,
+                        fromDatePicker.PersianDate.Month,
+                        fromDatePicker.PersianDate.Day,
+                        0, 0, 0, 0);
+
+                    fromDateGeorgian = $"{x.Year:D4}-{x.Month:D2}-{x.Day:D2}";
+                }
+                else
+                {
+                    fromDateGeorgian = fromDatePicker.GeorgianDate.ToString();
+                }
+
+                if (untilDatePicker.PersianDate.Year < 2000)
+                {
+                    PersianCalendar p = new PersianCalendar();
+                    DateTime x = p.ToDateTime(
+                        untilDatePicker.PersianDate.Year,
+                        untilDatePicker.PersianDate.Month,
+                        untilDatePicker.PersianDate.Day,
+                        0, 0, 0, 0);
+
+                    untilDateGeorgian = $"{x.Year:D4}-{x.Month:D2}-{x.Day:D2}";
+                }
+                else
+                {
+                    untilDateGeorgian = untilDatePicker.GeorgianDate.ToString();
+                }
+
+
+                if (tabCtrl.SelectedIndex == 0)
+                {
+                    BindFinalConsumerReportData(
+                        Properties.Settings.Default.FiscalPeriodId,
+                        fromDateGeorgian, untilDateGeorgian,
+                        Properties.Settings.Default.StockRoomId
+                    );
+                }
+                else if (tabCtrl.SelectedIndex == 1)
+                {
+                    BindTajerReportData(
+                        Properties.Settings.Default.FiscalPeriodId,
+                        fromDateGeorgian, untilDateGeorgian,
+                        Properties.Settings.Default.StockRoomId
+                    );
+                }
+            }
+            else
+            {
+                MessageBox.Show("خطای اعتبار سنجی:\n" + errorMessage, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string ValidateParameters()
+        {
+            List<string> errors = new List<string>();
+
+            if (Properties.Settings.Default.WorkSpaceId == 0)
+            {
+                errors.Add("لطفا شرکت را انتخاب کنید");
+            }
+
+            if (Properties.Settings.Default.FiscalPeriodId == 0)
+            {
+                errors.Add("لطفا دوره مالی را نتخاب کنید");
+            }
+
+            if (Properties.Settings.Default.StockRoomId == 0)
+            {
+                errors.Add("لطفا انبار را نتخاب کنید");
+            }
+
+            if (fromDatePicker.GeorgianDate == null)
+            {
+                errors.Add("لطفا تاریخ شروع را وارد کنید.");
+            }
+
+            if (untilDatePicker.GeorgianDate == null)
+            {
+                errors.Add("لطفا تاریخ پایان را وارد کنید.");
+            }
+
+
+            string errorMessage = string.Join("\n", errors);
+
+            return errorMessage;
+        }
+
+        private void BindFinalConsumerReportData(
+            int pFPID, string pSTARTDATE, string pENDDATE, int pSTOCKID
+            )
+        {
+            submitRetailReportList = GetFinalConsumerReportData(
+                pFPID, pSTARTDATE, pENDDATE, pSTOCKID
+            );
+            dataGridViewFinalConsumer.DataSource = submitRetailReportList;
+            PrepareFinalConsumerGrid();
+        }
+
+      
+
+        private void BindTajerReportData(
+            int pFPID, string pSTARTDATE, string pENDDATE, int pSTOCKID
+                )
+        {
+            transferOwnershipPlaceReportList = GetTajerReportData(
+                pFPID, pSTARTDATE, pENDDATE, pSTOCKID
+            );
+            dataGridViewTajer.DataSource = transferOwnershipPlaceReportList;
+            PrepareTajerGrid();
+        }
+
+       
+
+        public void PrepareTajerGrid()
+        {
+            dataGridViewTajer.Columns["CheckBox"].Visible = true;
+            dataGridViewTajer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+            dataGridViewTajer.AllowUserToResizeColumns = true;
+            dataGridViewTajer.ColumnHeadersHeight = 40; // Increase or decrease the value to adjust the height
+            dataGridViewTajer.RowTemplate.Height = 35;
+            dataGridViewTajer.AllowUserToResizeRows = true;
+            dataGridViewTajer.AllowUserToAddRows = false;
+            dataGridViewTajer.DefaultCellStyle.Font = new Font("Arial", 9);
+
+            foreach (KeyValuePair<string, GridRowModel> HGI in Dics.TajerGridInfo)
+            {
+                if (dataGridViewTajer.Columns[HGI.Key] == null) continue;
+                dataGridViewTajer.Columns[HGI.Key].HeaderText = HGI.Value.Title;
+                dataGridViewTajer.Columns[HGI.Key].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dataGridViewTajer.Columns[HGI.Key].Visible = (!HGI.Value.IsDetail || Properties.Settings.Default.ShowDetails);
+            }
+        }
+
+        public void PrepareFinalConsumerGrid()
+        {
+            dataGridViewFinalConsumer.Columns["CheckBoxFinalConsumer"].Visible = true;
+            dataGridViewFinalConsumer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+            dataGridViewFinalConsumer.AllowUserToResizeColumns = true;
+            dataGridViewFinalConsumer.ColumnHeadersHeight = 40; // Increase or decrease the value to adjust the height
+            dataGridViewFinalConsumer.RowTemplate.Height = 35;
+            dataGridViewFinalConsumer.AllowUserToResizeRows = true;
+            dataGridViewFinalConsumer.AllowUserToAddRows = false;
+            dataGridViewFinalConsumer.DefaultCellStyle.Font = new Font("Arial", 9);
+
+            foreach (KeyValuePair<string, GridRowModel> HGI in Dics.TajerGridInfo)
+            {
+                if (dataGridViewFinalConsumer.Columns[HGI.Key] == null) continue;
+                dataGridViewFinalConsumer.Columns[HGI.Key].HeaderText = HGI.Value.Title;
+                dataGridViewFinalConsumer.Columns[HGI.Key].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dataGridViewFinalConsumer.Columns[HGI.Key].Visible = (!HGI.Value.IsDetail || Properties.Settings.Default.ShowDetails);
+            }
+        }
+
+        private async void CallSubmitRetailService()
+        {
+            try
+            {
+                // Set your service URL
+                string serviceUrl = "https://pub-cix.ntsw.ir/services/InternalTradeServices?wsdl";
+
+                // Create an instance of the InternalTradeService
+                InternalTradeService tradeService = new InternalTradeService(serviceUrl);
+
+                // Populate the request variable with the required data
+                var request = new SubmitRetailRequest
+                {
+                    username = "your_username",
+                    srvPass = "your_srvPass",
+                    password_otpCode = "your_password_otpCode",
+                    PersonNationalID = "seller_national_id",
+                    UserRoleIDstr = "seller_role_id",
+                    UserRoleExtraFields = new UserRoleExtraFields
+                    {
+                        PostalCode = 1234567890,
+                        LicenseNumber = 1234567890,
+                        ActivityType = (int)ActivityType.Wholesaler // Use the appropriate activity type from the enum
+                    },
+                    DocumentDate = DateTime.Now, // Replace with the actual document date
+                    Description = "your_description",
+                    BuyerDatiles = new BuyerDatiles
+                    {
+                        BuyerName = "buyer_name",
+                        BuyerNationalID = "buyer_national_id",
+                        BuyerMobile = "buyer_mobile"
+                    },
+                    PostalCode = "seller_postal_code",
+                    Stuffs_In = new List<StuffIn>
+                    {
+                        new StuffIn { Code = "item_code_1", Count = 10, Price = 100 },
+                        new StuffIn { Code = "item_code_2", Count = 5, Price = 50 }
+                        // Add more items as needed
+                    },
+                    DocNumber = "your_document_number",
+                    statusAppointment = 0, // or 7, based on your requirement
+                    TraceCode = "your_trace_code"
+                };
+
+                // Call the SubmitRetail method
+                ApiResult<SubmitRetailResult> result = await tradeService.SubmitRetailAsync(request);
+
+                // Check the result
+                if (result.ResultCode == 0)
+                {
+                    // Handle successful result
+                    MessageBox.Show("SubmitRetail method called successfully!");
+                }
+                else
+                {
+                    // Handle API error
+                    MessageBox.Show($"API Error - Result Code: {result.ResultCode}, Result Message: {result.ResultMessage}");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                // Handle HTTP request exceptions
+                MessageBox.Show($"HTTP request error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                MessageBox.Show($"An error occurred: {ex.Message}");
+            }
+        }
+
+        private void btnSend_Click(object sender, EventArgs e)
+        {
+            CallSubmitRetailService();
+        }
+
+        #region DB interactions
         private List<WorkSpace> GetWorkSpaceData()
         {
             // Retrieve the connection string from the app.config
@@ -328,190 +570,9 @@ namespace kashka.Presentation_Layer.Forms
             }
         }
 
-        private void btnReport_Click(object sender, EventArgs e)
-        {
-            string errorMessage = ValidateParameters();
-            if (errorMessage.IsNullOrEmpty())
-            {
-                string fromDateGeorgian;
-                string untilDateGeorgian;
-
-                if (fromDatePicker.PersianDate.Year < 2000)
-                {
-                    PersianCalendar p = new PersianCalendar();
-                    DateTime x = p.ToDateTime(
-                        fromDatePicker.PersianDate.Year,
-                        fromDatePicker.PersianDate.Month,
-                        fromDatePicker.PersianDate.Day,
-                        0, 0, 0, 0);
-
-                    fromDateGeorgian = $"{x.Year:D4}-{x.Month:D2}-{x.Day:D2}";
-                }
-                else
-                {
-                    fromDateGeorgian = fromDatePicker.GeorgianDate.ToString();
-                }
-
-                if (untilDatePicker.PersianDate.Year < 2000)
-                {
-                    PersianCalendar p = new PersianCalendar();
-                    DateTime x = p.ToDateTime(
-                        untilDatePicker.PersianDate.Year,
-                        untilDatePicker.PersianDate.Month,
-                        untilDatePicker.PersianDate.Day,
-                        0, 0, 0, 0);
-
-                    untilDateGeorgian = $"{x.Year:D4}-{x.Month:D2}-{x.Day:D2}";
-                }
-                else
-                {
-                    untilDateGeorgian = untilDatePicker.GeorgianDate.ToString();
-                }
-
-
-                if (tabCtrl.SelectedIndex == 0)
-                {
-                    BindFinalConsumerReportData(
-                        Properties.Settings.Default.FiscalPeriodId,
-                        fromDateGeorgian, untilDateGeorgian,
-                        Properties.Settings.Default.StockRoomId
-                    );
-                }
-                else if (tabCtrl.SelectedIndex == 1)
-                {
-                    BindTajerReportData(
-                        Properties.Settings.Default.FiscalPeriodId,
-                        fromDateGeorgian, untilDateGeorgian,
-                        Properties.Settings.Default.StockRoomId
-                    );
-                }
-            }
-            else
-            {
-                MessageBox.Show("خطای اعتبار سنجی:\n" + errorMessage, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private string ValidateParameters()
-        {
-            List<string> errors = new List<string>();
-
-            if (Properties.Settings.Default.WorkSpaceId == 0)
-            {
-                errors.Add("لطفا شرکت را انتخاب کنید");
-            }
-
-            if (Properties.Settings.Default.FiscalPeriodId == 0)
-            {
-                errors.Add("لطفا دوره مالی را نتخاب کنید");
-            }
-
-            if (Properties.Settings.Default.StockRoomId == 0)
-            {
-                errors.Add("لطفا انبار را نتخاب کنید");
-            }
-
-            if (fromDatePicker.GeorgianDate == null)
-            {
-                errors.Add("لطفا تاریخ شروع را وارد کنید.");
-            }
-
-            if (untilDatePicker.GeorgianDate == null)
-            {
-                errors.Add("لطفا تاریخ پایان را وارد کنید.");
-            }
-
-
-            string errorMessage = string.Join("\n", errors);
-
-            return errorMessage;
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        private void BindFinalConsumerReportData(
-            int pFPID, string pSTARTDATE, string pENDDATE, int pSTOCKID
-            )
-        {
-            submitRetailReportList = GetFinalConsumerReportData(
-                pFPID, pSTARTDATE, pENDDATE, pSTOCKID
-            );
-            dataGridViewFinalConsumer.DataSource = submitRetailReportList;
-            PrepareFinalConsumerGrid();
-        }
-
-        public List<SubmitRetailReport> GetFinalConsumerReportData(
-            int pFPID, string pSTARTDATE, string pENDDATE, int pSTOCKID
-            )
-        {
-            submitRetailReportList = new List<SubmitRetailReport>();
-
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-
-                using (SqlCommand command = new SqlCommand("UD_REPORTSPFATORSERIALS", connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    // Add parameters
-                    command.Parameters.AddWithValue("@pFPID", pFPID);
-                    command.Parameters.AddWithValue("@pSTARTDATE", pSTARTDATE);
-                    command.Parameters.AddWithValue("@pENDDATE", pENDDATE);
-                    command.Parameters.AddWithValue("@pSTOCKID", pSTOCKID);
-
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            SubmitRetailReport reportData = new SubmitRetailReport
-                            {
-                                DocumentDate = reader["تاريخ سند"].ToString(),
-                                InvoiceNumber = reader["شماره صورتحساب"].ToString(),
-                                BuyerNationalId = reader["کد/شناسه ملي خريدار"].ToString(),
-                                BuyerName = reader["نام خريدار"].ToString(),
-                                MobileNumber = reader["تلفن همراه"].ToString(),
-                                SourceWarehousePostalCode = reader["کد پستي انبار مبدا"].ToString(),
-                                DocumentDescription = reader["شرح سند"].ToString(),
-                                ItemId = reader["شناسه کالا"].ToString(),
-                                TrackingId = reader["شناسه رهگيري"].ToString(),
-                                UnitPrice = Convert.ToDecimal(reader["مبلغ واحد"])
-                            };
-
-                            submitRetailReportList.Add(CodePageReflection<SubmitRetailReport>.fromTadbir(_codepageService, reportData));
-                        }
-                    }
-                }
-            }
-
-            return submitRetailReportList;
-        }
-
-        private void BindTajerReportData(
-            int pFPID, string pSTARTDATE, string pENDDATE, int pSTOCKID
-                )
-        {
-            transferOwnershipPlaceReportList = GetTajerReportData(
-                pFPID, pSTARTDATE, pENDDATE, pSTOCKID
-            );
-            dataGridViewTajer.DataSource = transferOwnershipPlaceReportList;
-            PrepareTajerGrid();
-        }
-
         public List<TransferOwnershipPlaceReport> GetTajerReportData(
-            int pFPID, string pSTARTDATE, string pENDDATE, int pStockId
-            )
+           int pFPID, string pSTARTDATE, string pENDDATE, int pStockId
+           )
         {
             transferOwnershipPlaceReportList = new List<TransferOwnershipPlaceReport>();
 
@@ -565,140 +626,52 @@ namespace kashka.Presentation_Layer.Forms
             return transferOwnershipPlaceReportList;
         }
 
-        public void PrepareTajerGrid()
+        public List<SubmitRetailReport> GetFinalConsumerReportData(
+          int pFPID, string pSTARTDATE, string pENDDATE, int pSTOCKID
+          )
         {
-            dataGridViewTajer.Columns["CheckBox"].Visible = true;
-            dataGridViewTajer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            dataGridViewTajer.AllowUserToResizeColumns = true;
-            dataGridViewTajer.ColumnHeadersHeight = 40; // Increase or decrease the value to adjust the height
-            dataGridViewTajer.RowTemplate.Height = 35;
-            dataGridViewTajer.AllowUserToResizeRows = true;
-            dataGridViewTajer.AllowUserToAddRows = false;
-            dataGridViewTajer.DefaultCellStyle.Font = new Font("Arial", 9);
+            submitRetailReportList = new List<SubmitRetailReport>();
 
-            foreach (KeyValuePair<string, GridRowModel> HGI in Dics.TajerGridInfo)
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                if (dataGridViewTajer.Columns[HGI.Key] == null) continue;
-                dataGridViewTajer.Columns[HGI.Key].HeaderText = HGI.Value.Title;
-                dataGridViewTajer.Columns[HGI.Key].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dataGridViewTajer.Columns[HGI.Key].Visible = (!HGI.Value.IsDetail || Properties.Settings.Default.ShowDetails);
-            }
-        }
+                connection.Open();
 
-        public void PrepareFinalConsumerGrid()
-        {
-            dataGridViewFinalConsumer.Columns["CheckBoxFinalConsumer"].Visible = true;
-            dataGridViewFinalConsumer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            dataGridViewFinalConsumer.AllowUserToResizeColumns = true;
-            dataGridViewFinalConsumer.ColumnHeadersHeight = 40; // Increase or decrease the value to adjust the height
-            dataGridViewFinalConsumer.RowTemplate.Height = 35;
-            dataGridViewFinalConsumer.AllowUserToResizeRows = true;
-            dataGridViewFinalConsumer.AllowUserToAddRows = false;
-            dataGridViewFinalConsumer.DefaultCellStyle.Font = new Font("Arial", 9);
-
-            foreach (KeyValuePair<string, GridRowModel> HGI in Dics.TajerGridInfo)
-            {
-                if (dataGridViewFinalConsumer.Columns[HGI.Key] == null) continue;
-                dataGridViewFinalConsumer.Columns[HGI.Key].HeaderText = HGI.Value.Title;
-                dataGridViewFinalConsumer.Columns[HGI.Key].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dataGridViewFinalConsumer.Columns[HGI.Key].Visible = (!HGI.Value.IsDetail || Properties.Settings.Default.ShowDetails);
-            }
-        }
-
-        private async void CallSubmitRetailService()
-        {
-            try
-            {
-                // Set your service URL
-                string serviceUrl = "https://pub-cix.ntsw.ir/services/InternalTradeServices?wsdl";
-
-                // Create an instance of the InternalTradeService
-                InternalTradeService tradeService = new InternalTradeService(serviceUrl);
-
-                // Populate the request variable with the required data
-                var request = new SubmitRetailRequest
+                using (SqlCommand command = new SqlCommand("UD_REPORTSPFATORSERIALS", connection))
                 {
-                    username = "your_username",
-                    srvPass = "your_srvPass",
-                    password_otpCode = "your_password_otpCode",
-                    PersonNationalID = "seller_national_id",
-                    UserRoleIDstr = "seller_role_id",
-                    UserRoleExtraFields = new UserRoleExtraFields
-                    {
-                        PostalCode = 1234567890,
-                        LicenseNumber = 1234567890,
-                        ActivityType = (int)ActivityType.Wholesaler // Use the appropriate activity type from the enum
-                    },
-                    DocumentDate = DateTime.Now, // Replace with the actual document date
-                    Description = "your_description",
-                    BuyerDatiles = new BuyerDatiles
-                    {
-                        BuyerName = "buyer_name",
-                        BuyerNationalID = "buyer_national_id",
-                        BuyerMobile = "buyer_mobile"
-                    },
-                    PostalCode = "seller_postal_code",
-                    Stuffs_In = new List<StuffIn>
-                    {
-                        new StuffIn { Code = "item_code_1", Count = 10, Price = 100 },
-                        new StuffIn { Code = "item_code_2", Count = 5, Price = 50 }
-                        // Add more items as needed
-                    },
-                    DocNumber = "your_document_number",
-                    statusAppointment = 0, // or 7, based on your requirement
-                    TraceCode = "your_trace_code"
-                };
+                    command.CommandType = CommandType.StoredProcedure;
 
-                // Call the SubmitRetail method
-                ApiResult<SubmitRetailResult> result = await tradeService.SubmitRetailAsync(request);
+                    // Add parameters
+                    command.Parameters.AddWithValue("@pFPID", pFPID);
+                    command.Parameters.AddWithValue("@pSTARTDATE", pSTARTDATE);
+                    command.Parameters.AddWithValue("@pENDDATE", pENDDATE);
+                    command.Parameters.AddWithValue("@pSTOCKID", pSTOCKID);
 
-                // Check the result
-                if (result.ResultCode == 0)
-                {
-                    // Handle successful result
-                    MessageBox.Show("SubmitRetail method called successfully!");
-                }
-                else
-                {
-                    // Handle API error
-                    MessageBox.Show($"API Error - Result Code: {result.ResultCode}, Result Message: {result.ResultMessage}");
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            SubmitRetailReport reportData = new SubmitRetailReport
+                            {
+                                DocumentDate = reader["تاريخ سند"].ToString(),
+                                InvoiceNumber = reader["شماره صورتحساب"].ToString(),
+                                BuyerNationalId = reader["کد/شناسه ملي خريدار"].ToString(),
+                                BuyerName = reader["نام خريدار"].ToString(),
+                                MobileNumber = reader["تلفن همراه"].ToString(),
+                                SourceWarehousePostalCode = reader["کد پستي انبار مبدا"].ToString(),
+                                DocumentDescription = reader["شرح سند"].ToString(),
+                                ItemId = reader["شناسه کالا"].ToString(),
+                                TrackingId = reader["شناسه رهگيري"].ToString(),
+                                UnitPrice = Convert.ToDecimal(reader["مبلغ واحد"])
+                            };
+
+                            submitRetailReportList.Add(CodePageReflection<SubmitRetailReport>.fromTadbir(_codepageService, reportData));
+                        }
+                    }
                 }
             }
-            catch (HttpRequestException ex)
-            {
-                // Handle HTTP request exceptions
-                MessageBox.Show($"HTTP request error: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                // Handle other exceptions
-                MessageBox.Show($"An error occurred: {ex.Message}");
-            }
+
+            return submitRetailReportList;
         }
-
-
-        private void tabPageTajer_Enter(object sender, EventArgs e)
-        {
-            //BindTajerReportData();
-        }
-
-        private void tabPageFinalConsumer_Enter(object sender, EventArgs e)
-        {
-            //BindFinalConsumerReportData();
-        }
-
-
-
-        private void cmbCompany_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cmbFiscalPeriod_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-
+        #endregion
     }
 }

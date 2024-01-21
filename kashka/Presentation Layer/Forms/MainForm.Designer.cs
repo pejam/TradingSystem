@@ -38,14 +38,26 @@ namespace kashka.Presentation_Layer.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             txtNumber = new TextBox();
             statusStrip1 = new StatusStrip();
             toolStripStatusLabelVersion = new ToolStripStatusLabel();
             toolStripStatusLabelNetWorkStatus = new ToolStripStatusLabel();
             tabCtrl = new TabControl();
+            tabPageFinalConsumer = new TabPage();
+            dataGridViewFinalConsumer = new DataGridView();
+            CheckBoxFinalConsumer = new DataGridViewCheckBoxColumn();
+            toolStripFinalConsumer = new ToolStrip();
+            toolStripButton1 = new ToolStripButton();
+            toolStripButton2 = new ToolStripButton();
+            toolStripButton3 = new ToolStripButton();
+            toolStripButton4 = new ToolStripButton();
+            toolStripButton5 = new ToolStripButton();
+            toolStripSeparator2 = new ToolStripSeparator();
+            toolStripLabel1 = new ToolStripLabel();
+            toolStripLabel2 = new ToolStripLabel();
             tabPageTajer = new TabPage();
             dataGridViewTajer = new DataGridView();
             CheckBox = new DataGridViewCheckBoxColumn();
@@ -59,18 +71,6 @@ namespace kashka.Presentation_Layer.Forms
             toolStripLabelLastSended = new ToolStripLabel();
             toolStripLabelLastSendedNo = new ToolStripLabel();
             btnSend = new Button();
-            tabPageFinalConsumer = new TabPage();
-            dataGridViewFinalConsumer = new DataGridView();
-            CheckBoxFinalConsumer = new DataGridViewCheckBoxColumn();
-            toolStripFinalConsumer = new ToolStrip();
-            toolStripButton1 = new ToolStripButton();
-            toolStripButton2 = new ToolStripButton();
-            toolStripButton3 = new ToolStripButton();
-            toolStripButton4 = new ToolStripButton();
-            toolStripButton5 = new ToolStripButton();
-            toolStripSeparator2 = new ToolStripSeparator();
-            toolStripLabel1 = new ToolStripLabel();
-            toolStripLabel2 = new ToolStripLabel();
             txtStockRoom = new TextBox();
             txtFiscalPeriod = new TextBox();
             btnStockRoom = new Button();
@@ -87,12 +87,12 @@ namespace kashka.Presentation_Layer.Forms
             btnReport = new Button();
             statusStrip1.SuspendLayout();
             tabCtrl.SuspendLayout();
-            tabPageTajer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridViewTajer).BeginInit();
-            toolStripTajer.SuspendLayout();
             tabPageFinalConsumer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewFinalConsumer).BeginInit();
             toolStripFinalConsumer.SuspendLayout();
+            tabPageTajer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewTajer).BeginInit();
+            toolStripTajer.SuspendLayout();
             SuspendLayout();
             // 
             // txtNumber
@@ -118,7 +118,7 @@ namespace kashka.Presentation_Layer.Forms
             // 
             toolStripStatusLabelVersion.Name = "toolStripStatusLabelVersion";
             toolStripStatusLabelVersion.Padding = new Padding(0, 0, 50, 0);
-            toolStripStatusLabelVersion.Size = new Size(114, 21);
+            toolStripStatusLabelVersion.Size = new Size(156, 32);
             toolStripStatusLabelVersion.Tag = "";
             toolStripStatusLabelVersion.Text = "نسخه 1.0";
             // 
@@ -142,153 +142,17 @@ namespace kashka.Presentation_Layer.Forms
             tabCtrl.Size = new Size(1751, 648);
             tabCtrl.TabIndex = 3;
             // 
-            // tabPageTajer
-            // 
-            tabPageTajer.Controls.Add(dataGridViewTajer);
-            tabPageTajer.Controls.Add(toolStripTajer);
-            tabPageTajer.Controls.Add(btnSend);
-            tabPageTajer.Location = new Point(8, 46);
-            tabPageTajer.Name = "tabPageTajer";
-            tabPageTajer.Padding = new Padding(3, 3, 3, 3);
-            tabPageTajer.Size = new Size(1735, 594);
-            tabPageTajer.TabIndex = 0;
-            tabPageTajer.Text = "گزارش تاجر";
-            tabPageTajer.UseVisualStyleBackColor = true;
-            tabPageTajer.Enter += tabPageTajer_Enter;
-            // 
-            // dataGridViewTajer
-            // 
-            dataGridViewTajer.BackgroundColor = SystemColors.ControlLightLight;
-            dataGridViewTajer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewTajer.Columns.AddRange(new DataGridViewColumn[] { CheckBox });
-            dataGridViewTajer.Dock = DockStyle.Fill;
-            dataGridViewTajer.Location = new Point(3, 3);
-            dataGridViewTajer.Margin = new Padding(1, 2, 1, 2);
-            dataGridViewTajer.Name = "dataGridViewTajer";
-            dataGridViewTajer.RowHeadersVisible = false;
-            dataGridViewTajer.RowHeadersWidth = 82;
-            dataGridViewCellStyle2.BackColor = SystemColors.GradientInactiveCaption;
-            dataGridViewTajer.RowsDefaultCellStyle = dataGridViewCellStyle2;
-            dataGridViewTajer.RowTemplate.Height = 55;
-            dataGridViewTajer.Size = new Size(1729, 588);
-            dataGridViewTajer.TabIndex = 14;
-            // 
-            // CheckBox
-            // 
-            CheckBox.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-            CheckBox.FalseValue = "";
-            CheckBox.Frozen = true;
-            CheckBox.HeaderText = "";
-            CheckBox.MinimumWidth = 10;
-            CheckBox.Name = "CheckBox";
-            CheckBox.Resizable = DataGridViewTriState.False;
-            CheckBox.TrueValue = "";
-            CheckBox.Visible = false;
-            CheckBox.Width = 200;
-            // 
-            // toolStripTajer
-            // 
-            toolStripTajer.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            toolStripTajer.ImageScalingSize = new Size(25, 25);
-            toolStripTajer.Items.AddRange(new ToolStripItem[] { toolStripButtonDeselectAll, toolStripButtonSellectAll, toolStripButtonDeleteInvoices, toolStripButtonRefreshDB, toolStripButtonShowDetails, toolStripSeparator1, toolStripLabelLastSended, toolStripLabelLastSendedNo });
-            toolStripTajer.Location = new Point(3, 3);
-            toolStripTajer.Name = "toolStripTajer";
-            toolStripTajer.Padding = new Padding(0, 0, 3, 0);
-            toolStripTajer.Size = new Size(1729, 38);
-            toolStripTajer.TabIndex = 13;
-            toolStripTajer.Text = "toolStripHeader";
-            toolStripTajer.Visible = false;
-            // 
-            // toolStripButtonDeselectAll
-            // 
-            toolStripButtonDeselectAll.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButtonDeselectAll.Image = (Image)resources.GetObject("toolStripButtonDeselectAll.Image");
-            toolStripButtonDeselectAll.ImageTransparentColor = Color.Magenta;
-            toolStripButtonDeselectAll.Name = "toolStripButtonDeselectAll";
-            toolStripButtonDeselectAll.Size = new Size(46, 32);
-            toolStripButtonDeselectAll.Text = "لغو انتخاب ها";
-            // 
-            // toolStripButtonSellectAll
-            // 
-            toolStripButtonSellectAll.BackColor = Color.Transparent;
-            toolStripButtonSellectAll.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButtonSellectAll.Image = (Image)resources.GetObject("toolStripButtonSellectAll.Image");
-            toolStripButtonSellectAll.ImageTransparentColor = Color.Magenta;
-            toolStripButtonSellectAll.Name = "toolStripButtonSellectAll";
-            toolStripButtonSellectAll.Size = new Size(46, 32);
-            toolStripButtonSellectAll.Text = "انتخاب همه موارد";
-            // 
-            // toolStripButtonDeleteInvoices
-            // 
-            toolStripButtonDeleteInvoices.Alignment = ToolStripItemAlignment.Right;
-            toolStripButtonDeleteInvoices.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButtonDeleteInvoices.Image = (Image)resources.GetObject("toolStripButtonDeleteInvoices.Image");
-            toolStripButtonDeleteInvoices.ImageTransparentColor = Color.Magenta;
-            toolStripButtonDeleteInvoices.Name = "toolStripButtonDeleteInvoices";
-            toolStripButtonDeleteInvoices.Size = new Size(46, 32);
-            toolStripButtonDeleteInvoices.Text = "حذف موارد";
-            // 
-            // toolStripButtonRefreshDB
-            // 
-            toolStripButtonRefreshDB.Alignment = ToolStripItemAlignment.Right;
-            toolStripButtonRefreshDB.BackgroundImageLayout = ImageLayout.Stretch;
-            toolStripButtonRefreshDB.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButtonRefreshDB.Image = (Image)resources.GetObject("toolStripButtonRefreshDB.Image");
-            toolStripButtonRefreshDB.ImageTransparentColor = Color.Magenta;
-            toolStripButtonRefreshDB.Name = "toolStripButtonRefreshDB";
-            toolStripButtonRefreshDB.Size = new Size(46, 32);
-            toolStripButtonRefreshDB.Text = "بازیابی اطلاعات از دیتابیس";
-            // 
-            // toolStripButtonShowDetails
-            // 
-            toolStripButtonShowDetails.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButtonShowDetails.Image = (Image)resources.GetObject("toolStripButtonShowDetails.Image");
-            toolStripButtonShowDetails.ImageTransparentColor = Color.Magenta;
-            toolStripButtonShowDetails.Name = "toolStripButtonShowDetails";
-            toolStripButtonShowDetails.Size = new Size(46, 32);
-            toolStripButtonShowDetails.Text = "مشاهده تمامی فیلدها";
-            // 
-            // toolStripSeparator1
-            // 
-            toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(6, 38);
-            // 
-            // toolStripLabelLastSended
-            // 
-            toolStripLabelLastSended.Name = "toolStripLabelLastSended";
-            toolStripLabelLastSended.Size = new Size(309, 32);
-            toolStripLabelLastSended.Text = "شماره آخرین مورد ارسال شده:";
-            // 
-            // toolStripLabelLastSendedNo
-            // 
-            toolStripLabelLastSendedNo.Name = "toolStripLabelLastSendedNo";
-            toolStripLabelLastSendedNo.Size = new Size(0, 32);
-            // 
-            // btnSend
-            // 
-            btnSend.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnSend.BackgroundImage = (Image)resources.GetObject("btnSend.BackgroundImage");
-            btnSend.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSend.Location = new Point(198, 372);
-            btnSend.Margin = new Padding(1, 2, 1, 2);
-            btnSend.Name = "btnSend";
-            btnSend.Size = new Size(62, 180);
-            btnSend.TabIndex = 10;
-            btnSend.Tag = "ارسال";
-            btnSend.UseVisualStyleBackColor = true;
-            // 
             // tabPageFinalConsumer
             // 
             tabPageFinalConsumer.Controls.Add(dataGridViewFinalConsumer);
             tabPageFinalConsumer.Controls.Add(toolStripFinalConsumer);
             tabPageFinalConsumer.Location = new Point(8, 46);
             tabPageFinalConsumer.Name = "tabPageFinalConsumer";
-            tabPageFinalConsumer.Padding = new Padding(3, 3, 3, 3);
+            tabPageFinalConsumer.Padding = new Padding(3);
             tabPageFinalConsumer.Size = new Size(1735, 594);
             tabPageFinalConsumer.TabIndex = 1;
             tabPageFinalConsumer.Text = "گزارش مصرف کننده نهایی";
             tabPageFinalConsumer.UseVisualStyleBackColor = true;
-            tabPageFinalConsumer.Enter += tabPageFinalConsumer_Enter;
             // 
             // dataGridViewFinalConsumer
             // 
@@ -396,6 +260,141 @@ namespace kashka.Presentation_Layer.Forms
             // 
             toolStripLabel2.Name = "toolStripLabel2";
             toolStripLabel2.Size = new Size(0, 32);
+            // 
+            // tabPageTajer
+            // 
+            tabPageTajer.Controls.Add(dataGridViewTajer);
+            tabPageTajer.Controls.Add(toolStripTajer);
+            tabPageTajer.Location = new Point(8, 46);
+            tabPageTajer.Name = "tabPageTajer";
+            tabPageTajer.Padding = new Padding(3);
+            tabPageTajer.Size = new Size(1735, 594);
+            tabPageTajer.TabIndex = 0;
+            tabPageTajer.Text = "گزارش تاجر";
+            tabPageTajer.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewTajer
+            // 
+            dataGridViewTajer.BackgroundColor = SystemColors.ControlLightLight;
+            dataGridViewTajer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewTajer.Columns.AddRange(new DataGridViewColumn[] { CheckBox });
+            dataGridViewTajer.Dock = DockStyle.Fill;
+            dataGridViewTajer.Location = new Point(3, 3);
+            dataGridViewTajer.Margin = new Padding(1, 2, 1, 2);
+            dataGridViewTajer.Name = "dataGridViewTajer";
+            dataGridViewTajer.RowHeadersVisible = false;
+            dataGridViewTajer.RowHeadersWidth = 82;
+            dataGridViewCellStyle2.BackColor = SystemColors.GradientInactiveCaption;
+            dataGridViewTajer.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewTajer.RowTemplate.Height = 55;
+            dataGridViewTajer.Size = new Size(1729, 588);
+            dataGridViewTajer.TabIndex = 14;
+            // 
+            // CheckBox
+            // 
+            CheckBox.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+            CheckBox.FalseValue = "";
+            CheckBox.Frozen = true;
+            CheckBox.HeaderText = "";
+            CheckBox.MinimumWidth = 10;
+            CheckBox.Name = "CheckBox";
+            CheckBox.Resizable = DataGridViewTriState.False;
+            CheckBox.TrueValue = "";
+            CheckBox.Visible = false;
+            CheckBox.Width = 200;
+            // 
+            // toolStripTajer
+            // 
+            toolStripTajer.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            toolStripTajer.ImageScalingSize = new Size(25, 25);
+            toolStripTajer.Items.AddRange(new ToolStripItem[] { toolStripButtonDeselectAll, toolStripButtonSellectAll, toolStripButtonDeleteInvoices, toolStripButtonRefreshDB, toolStripButtonShowDetails, toolStripSeparator1, toolStripLabelLastSended, toolStripLabelLastSendedNo });
+            toolStripTajer.Location = new Point(3, 3);
+            toolStripTajer.Name = "toolStripTajer";
+            toolStripTajer.Padding = new Padding(0, 0, 3, 0);
+            toolStripTajer.Size = new Size(1729, 38);
+            toolStripTajer.TabIndex = 13;
+            toolStripTajer.Text = "toolStripHeader";
+            toolStripTajer.Visible = false;
+            // 
+            // toolStripButtonDeselectAll
+            // 
+            toolStripButtonDeselectAll.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButtonDeselectAll.Image = (Image)resources.GetObject("toolStripButtonDeselectAll.Image");
+            toolStripButtonDeselectAll.ImageTransparentColor = Color.Magenta;
+            toolStripButtonDeselectAll.Name = "toolStripButtonDeselectAll";
+            toolStripButtonDeselectAll.Size = new Size(46, 32);
+            toolStripButtonDeselectAll.Text = "لغو انتخاب ها";
+            // 
+            // toolStripButtonSellectAll
+            // 
+            toolStripButtonSellectAll.BackColor = Color.Transparent;
+            toolStripButtonSellectAll.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButtonSellectAll.Image = (Image)resources.GetObject("toolStripButtonSellectAll.Image");
+            toolStripButtonSellectAll.ImageTransparentColor = Color.Magenta;
+            toolStripButtonSellectAll.Name = "toolStripButtonSellectAll";
+            toolStripButtonSellectAll.Size = new Size(46, 32);
+            toolStripButtonSellectAll.Text = "انتخاب همه موارد";
+            // 
+            // toolStripButtonDeleteInvoices
+            // 
+            toolStripButtonDeleteInvoices.Alignment = ToolStripItemAlignment.Right;
+            toolStripButtonDeleteInvoices.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButtonDeleteInvoices.Image = (Image)resources.GetObject("toolStripButtonDeleteInvoices.Image");
+            toolStripButtonDeleteInvoices.ImageTransparentColor = Color.Magenta;
+            toolStripButtonDeleteInvoices.Name = "toolStripButtonDeleteInvoices";
+            toolStripButtonDeleteInvoices.Size = new Size(46, 32);
+            toolStripButtonDeleteInvoices.Text = "حذف موارد";
+            // 
+            // toolStripButtonRefreshDB
+            // 
+            toolStripButtonRefreshDB.Alignment = ToolStripItemAlignment.Right;
+            toolStripButtonRefreshDB.BackgroundImageLayout = ImageLayout.Stretch;
+            toolStripButtonRefreshDB.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButtonRefreshDB.Image = (Image)resources.GetObject("toolStripButtonRefreshDB.Image");
+            toolStripButtonRefreshDB.ImageTransparentColor = Color.Magenta;
+            toolStripButtonRefreshDB.Name = "toolStripButtonRefreshDB";
+            toolStripButtonRefreshDB.Size = new Size(46, 32);
+            toolStripButtonRefreshDB.Text = "بازیابی اطلاعات از دیتابیس";
+            // 
+            // toolStripButtonShowDetails
+            // 
+            toolStripButtonShowDetails.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButtonShowDetails.Image = (Image)resources.GetObject("toolStripButtonShowDetails.Image");
+            toolStripButtonShowDetails.ImageTransparentColor = Color.Magenta;
+            toolStripButtonShowDetails.Name = "toolStripButtonShowDetails";
+            toolStripButtonShowDetails.Size = new Size(46, 32);
+            toolStripButtonShowDetails.Text = "مشاهده تمامی فیلدها";
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(6, 38);
+            // 
+            // toolStripLabelLastSended
+            // 
+            toolStripLabelLastSended.Name = "toolStripLabelLastSended";
+            toolStripLabelLastSended.Size = new Size(412, 32);
+            toolStripLabelLastSended.Text = "شماره آخرین مورد ارسال شده:";
+            // 
+            // toolStripLabelLastSendedNo
+            // 
+            toolStripLabelLastSendedNo.Name = "toolStripLabelLastSendedNo";
+            toolStripLabelLastSendedNo.Size = new Size(0, 32);
+            // 
+            // btnSend
+            // 
+            btnSend.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnSend.BackgroundImageLayout = ImageLayout.Stretch;
+            btnSend.Location = new Point(23, 952);
+            btnSend.Margin = new Padding(1, 2, 1, 2);
+            btnSend.Name = "btnSend";
+            btnSend.RightToLeft = RightToLeft.Yes;
+            btnSend.Size = new Size(109, 61);
+            btnSend.TabIndex = 10;
+            btnSend.Tag = "ارسال";
+            btnSend.Text = "ارسال";
+            btnSend.UseVisualStyleBackColor = true;
+            btnSend.Click += btnSend_Click;
             // 
             // txtStockRoom
             // 
@@ -556,6 +555,7 @@ namespace kashka.Presentation_Layer.Forms
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1762, 1061);
             Controls.Add(btnReport);
+            Controls.Add(btnSend);
             Controls.Add(fromDatePicker);
             Controls.Add(lblFrom);
             Controls.Add(lblUntil);
@@ -577,16 +577,16 @@ namespace kashka.Presentation_Layer.Forms
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             tabCtrl.ResumeLayout(false);
-            tabPageTajer.ResumeLayout(false);
-            tabPageTajer.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridViewTajer).EndInit();
-            toolStripTajer.ResumeLayout(false);
-            toolStripTajer.PerformLayout();
             tabPageFinalConsumer.ResumeLayout(false);
             tabPageFinalConsumer.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewFinalConsumer).EndInit();
             toolStripFinalConsumer.ResumeLayout(false);
             toolStripFinalConsumer.PerformLayout();
+            tabPageTajer.ResumeLayout(false);
+            tabPageTajer.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewTajer).EndInit();
+            toolStripTajer.ResumeLayout(false);
+            toolStripTajer.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
