@@ -8,8 +8,10 @@ namespace kashka.Business_Logic_Layer.Models
 {
     public class WebReqInfo
     {
-        public int FactorId { get; set; }
-        public int FactorArticleId { get; set; }
+        public string InvoiceNumber { get; set; }
+        public int StockRoomId { get; set; }
+        public int FiscalPeriodId { get; set; }
+        public int UserId { get; set; }
         public int Status { get; set; }
         public string Message { get; set; }
     }

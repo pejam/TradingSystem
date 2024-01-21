@@ -27,13 +27,16 @@ namespace kashka.Utilities
                     if (result == null)
                     {
                         // Table doesn't exist, create it
-                        string createTableScript = @"
-                  CREATE TABLE UD_WebReqInfo (
-                      SPId NVARCHAR(MAX),
-                      SPAId NVARCHAR(MAX),
-                      Status NVARCHAR(MAX),
-                      Message NVARCHAR(MAX)
-                  )";
+                        string createTableScript = @"CREATE TABLE dbo.UD_WebReqInfo (
+                                                      Id INT IDENTITY
+                                                     ,InvoiceNumber VARCHAR(61) NOT NULL
+                                                     ,StockRoomId INT NOT NULL
+                                                     ,FiscalPeriodId INT NOT NULL
+                                                     ,UserId INT NOT NULL
+                                                     ,Status INT NOT NULL
+                                                     ,Message VARCHAR(MAX) NULL
+                                                     ,CONSTRAINT PK_UD_WebReqInfo_Id PRIMARY KEY CLUSTERED (Id)
+                                                    )";
 
                         using (SqlCommand createCmd = new SqlCommand(createTableScript, connection))
                         {
@@ -44,13 +47,15 @@ namespace kashka.Utilities
 
                 // Insert data into the table
                 string insertScript = @"
-           INSERT INTO UD_WebReqInfo (SPId, SPAId, Status, Message)
-           VALUES (@SPId, @SPAId, @Status, @Message)";
+           INSERT INTO UD_WebReqInfo (InvoiceNumber, StockRoomId, FiscalPeriodId, UserId,Status, Message)
+           VALUES (@InvoiceNumber, @StockRoomId, @FiscalPeriodId, @UserId , @Status , @Message)";
 
                 using (SqlCommand insertCmd = new SqlCommand(insertScript, connection))
                 {
-                    insertCmd.Parameters.AddWithValue("@SPId", webReqInfo.FactorId);
-                    insertCmd.Parameters.AddWithValue("@SPAId", webReqInfo.FactorArticleId);
+                    insertCmd.Parameters.AddWithValue("@InvoiceNumber", webReqInfo.InvoiceNumber);
+                    insertCmd.Parameters.AddWithValue("@StockRoomId", webReqInfo.StockRoomId);
+                    insertCmd.Parameters.AddWithValue("@FiscalPeriodId", webReqInfo.FiscalPeriodId);
+                    insertCmd.Parameters.AddWithValue("@UserId", webReqInfo.UserId);
                     insertCmd.Parameters.AddWithValue("@Status", webReqInfo.Status);
                     insertCmd.Parameters.AddWithValue("@Message", webReqInfo.Message);
 

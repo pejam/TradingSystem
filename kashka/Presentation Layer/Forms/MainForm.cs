@@ -346,7 +346,7 @@ namespace kashka.Presentation_Layer.Forms
 
                 if (tabCtrl.SelectedIndex == 0)
                 {
-                    BindTajerReportData(
+                    BindFinalConsumerReportData(
                         Properties.Settings.Default.FiscalPeriodId,
                         fromDateMiladi, untilDateMiladi,
                         Properties.Settings.Default.StockRoomId
@@ -354,7 +354,7 @@ namespace kashka.Presentation_Layer.Forms
                 }
                 else if (tabCtrl.SelectedIndex == 1)
                 {
-                    BindFinalConsumerReportData(
+                    BindTajerReportData(
                         Properties.Settings.Default.FiscalPeriodId,
                         fromDateMiladi, untilDateMiladi,
                         Properties.Settings.Default.StockRoomId
@@ -555,7 +555,7 @@ namespace kashka.Presentation_Layer.Forms
             {
                 if (dataGridViewTajer.Columns[HGI.Key] == null) continue;
                 dataGridViewTajer.Columns[HGI.Key].HeaderText = HGI.Value.Title;
-                dataGridViewTajer.Columns[HGI.Key].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+                dataGridViewTajer.Columns[HGI.Key].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                 dataGridViewTajer.Columns[HGI.Key].Visible = (!HGI.Value.IsDetail || Properties.Settings.Default.ShowDetails);
             }
         }
@@ -575,7 +575,7 @@ namespace kashka.Presentation_Layer.Forms
             {
                 if (dataGridViewFinalConsumer.Columns[HGI.Key] == null) continue;
                 dataGridViewFinalConsumer.Columns[HGI.Key].HeaderText = HGI.Value.Title;
-                dataGridViewFinalConsumer.Columns[HGI.Key].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+                dataGridViewFinalConsumer.Columns[HGI.Key].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                 dataGridViewFinalConsumer.Columns[HGI.Key].Visible = (!HGI.Value.IsDetail || Properties.Settings.Default.ShowDetails);
             }
         }

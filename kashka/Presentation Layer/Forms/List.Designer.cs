@@ -34,22 +34,26 @@
             // lstItems
             // 
             lstItems.FormattingEnabled = true;
-            lstItems.ItemHeight = 21;
-            lstItems.Location = new Point(12, 15);
+            lstItems.ItemHeight = 32;
+            lstItems.Location = new Point(17, 23);
+            lstItems.Margin = new Padding(4, 5, 4, 5);
             lstItems.Name = "lstItems";
-            lstItems.Size = new Size(297, 424);
+            lstItems.Size = new Size(427, 644);
             lstItems.TabIndex = 0;
             lstItems.DoubleClick += buttonOK_Click;
             // 
             // List
             // 
-            AutoScaleDimensions = new SizeF(9F, 21F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(321, 450);
+            ClientSize = new Size(464, 686);
             Controls.Add(lstItems);
             DoubleBuffered = true;
+            Margin = new Padding(4, 5, 4, 5);
+            MinimizeBox = false;
             Name = "List";
             RightToLeft = RightToLeft.Yes;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "List";
             ResumeLayout(false);
         }
