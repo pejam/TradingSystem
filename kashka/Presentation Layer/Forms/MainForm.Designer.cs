@@ -44,7 +44,6 @@ namespace kashka.Presentation_Layer.Forms
             txtNumber = new TextBox();
             statusStrip1 = new StatusStrip();
             toolStripStatusLabelVersion = new ToolStripStatusLabel();
-            toolStripStatusLabelNetWorkStatus = new ToolStripStatusLabel();
             tabCtrl = new TabControl();
             tabPageFinalConsumer = new TabPage();
             dataGridViewFinalConsumer = new DataGridView();
@@ -106,7 +105,7 @@ namespace kashka.Presentation_Layer.Forms
             // statusStrip1
             // 
             statusStrip1.ImageScalingSize = new Size(32, 32);
-            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabelVersion, toolStripStatusLabelNetWorkStatus });
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabelVersion });
             statusStrip1.Location = new Point(0, 1019);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.RightToLeft = RightToLeft.Yes;
@@ -121,13 +120,6 @@ namespace kashka.Presentation_Layer.Forms
             toolStripStatusLabelVersion.Size = new Size(156, 32);
             toolStripStatusLabelVersion.Tag = "";
             toolStripStatusLabelVersion.Text = "نسخه 1.0";
-            // 
-            // toolStripStatusLabelNetWorkStatus
-            // 
-            toolStripStatusLabelNetWorkStatus.ForeColor = Color.DarkOrange;
-            toolStripStatusLabelNetWorkStatus.Name = "toolStripStatusLabelNetWorkStatus";
-            toolStripStatusLabelNetWorkStatus.Size = new Size(220, 32);
-            toolStripStatusLabelNetWorkStatus.Text = "وضعیت اتصال شبکه";
             // 
             // tabCtrl
             // 
@@ -608,7 +600,6 @@ namespace kashka.Presentation_Layer.Forms
         private TabPage tabPageTejari;
         private TabPage tabPageFinalConsumer;
         private TabPage tabPageTajer;
-        private ToolStripStatusLabel toolStripStatusLabelNetWorkStatus;
         private ToolStrip toolStripTajer;
         private ToolStripButton toolStripButtonDeselectAll;
         private ToolStripButton toolStripButtonSellectAll;

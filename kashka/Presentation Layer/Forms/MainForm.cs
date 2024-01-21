@@ -298,7 +298,7 @@ namespace kashka.Presentation_Layer.Forms
             PrepareFinalConsumerGrid();
         }
 
-      
+
 
         private void BindTajerReportData(
             int pFPID, string pSTARTDATE, string pENDDATE, int pSTOCKID
@@ -311,7 +311,7 @@ namespace kashka.Presentation_Layer.Forms
             PrepareTajerGrid();
         }
 
-       
+
 
         public void PrepareTajerGrid()
         {
