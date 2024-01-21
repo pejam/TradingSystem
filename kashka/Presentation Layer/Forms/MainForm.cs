@@ -4,10 +4,10 @@ using Microsoft.Data.SqlClient;
 using System.Configuration;
 using kashka.Enums;
 using kashka.Data_Access_Layer.Repositories;
-using System.Windows.Forms;
 using System.Data;
 using kashka.Business_Logic_Layer;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
 
 namespace kashka.Presentation_Layer.Forms
 {
@@ -330,25 +330,50 @@ namespace kashka.Presentation_Layer.Forms
 
         private void btnReport_Click(object sender, EventArgs e)
         {
-            DateTime? fromDate = fromDatePicker.GeorgianDate;
-            DateTime? untilDate = untilDatePicker.GeorgianDate;
-
-            string errorMessage = ValidateParameters(fromDate, untilDate);
-
+            string errorMessage = ValidateParameters();
             if (errorMessage.IsNullOrEmpty())
             {
-                DateTime inputFromDate = DateTime.Parse(fromDate.ToString());
-                string fromDateMiladi = inputFromDate.ToString("yyyy-MM-dd");
+                string fromDateGeorgian;
+                string untilDateGeorgian;
 
+                if (fromDatePicker.PersianDate.Year < 2000)
+                {
+                    PersianCalendar p = new PersianCalendar();
+                    DateTime x = p.ToDateTime(
+                        fromDatePicker.PersianDate.Year,
+                        fromDatePicker.PersianDate.Month,
+                        fromDatePicker.PersianDate.Day,
+                        0, 0, 0, 0);
 
-                DateTime inputUntilDate = DateTime.Parse(untilDate.ToString());
-                string untilDateMiladi = inputUntilDate.ToString("yyyy-MM-dd");
+                    fromDateGeorgian = $"{x.Year:D4}-{x.Month:D2}-{x.Day:D2}";
+                }
+                else
+                {
+                    fromDateGeorgian = fromDatePicker.GeorgianDate.ToString();
+                }
+
+                if (untilDatePicker.PersianDate.Year < 2000)
+                {
+                    PersianCalendar p = new PersianCalendar();
+                    DateTime x = p.ToDateTime(
+                        untilDatePicker.PersianDate.Year,
+                        untilDatePicker.PersianDate.Month,
+                        untilDatePicker.PersianDate.Day,
+                        0, 0, 0, 0);
+
+                    untilDateGeorgian = $"{x.Year:D4}-{x.Month:D2}-{x.Day:D2}";
+                }
+                else
+                {
+                    untilDateGeorgian = untilDatePicker.GeorgianDate.ToString();
+                }
+
 
                 if (tabCtrl.SelectedIndex == 0)
                 {
                     BindFinalConsumerReportData(
                         Properties.Settings.Default.FiscalPeriodId,
-                        fromDateMiladi, untilDateMiladi,
+                        fromDateGeorgian, untilDateGeorgian,
                         Properties.Settings.Default.StockRoomId
                     );
                 }
@@ -356,7 +381,7 @@ namespace kashka.Presentation_Layer.Forms
                 {
                     BindTajerReportData(
                         Properties.Settings.Default.FiscalPeriodId,
-                        fromDateMiladi, untilDateMiladi,
+                        fromDateGeorgian, untilDateGeorgian,
                         Properties.Settings.Default.StockRoomId
                     );
                 }
@@ -367,7 +392,7 @@ namespace kashka.Presentation_Layer.Forms
             }
         }
 
-        private string ValidateParameters(DateTime? startDate, DateTime? endDate)
+        private string ValidateParameters()
         {
             List<string> errors = new List<string>();
 
@@ -386,12 +411,12 @@ namespace kashka.Presentation_Layer.Forms
                 errors.Add("لطفا انبار را نتخاب کنید");
             }
 
-            if (startDate == null)
+            if (fromDatePicker.GeorgianDate == null)
             {
                 errors.Add("لطفا تاریخ شروع را وارد کنید.");
             }
 
-            if (endDate == null)
+            if (untilDatePicker.GeorgianDate == null)
             {
                 errors.Add("لطفا تاریخ پایان را وارد کنید.");
             }
