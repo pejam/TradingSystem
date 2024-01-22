@@ -75,7 +75,7 @@ namespace kashka.Business_Logic_Layer.Models
         /// <summary>
         /// اطلاعات کالا
         /// </summary>
-        public List<Stuff_Code_Count_Pair> Stuffs_Code_Count_Pair { get; set; }
+        public List<Stuff_Code_Count_Pair> Stuffs_In { get; set; }
 
         /// <summary>
         /// شرح سند
@@ -84,6 +84,12 @@ namespace kashka.Business_Logic_Layer.Models
 
         /// <summary>
         /// وضعیت سند
+        ///
+        /// 0: ثبت نهایی
+        /// 7: ثبت اولیه
+        /// 1: استعلام ثبت
+        /// بصورت پیش فرض با وضعیت ثبت نهایی ثبت می شود
+        /// 
         /// </summary>
         public int StatusAppointment { get; set; }
 

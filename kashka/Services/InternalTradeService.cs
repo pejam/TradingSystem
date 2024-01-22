@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using kashka.Enums;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using System.Net;
 
 namespace kashka.Services
 {
@@ -178,7 +180,7 @@ namespace kashka.Services
                                 </int:Buyer_UserRoleExtraFields>
                                 <int:Stuffs_In>
                                     <!-- Add elements for each item in the list -->
-                                    {string.Join("", request.Stuffs_Code_Count_Pair.Select(stuff => $@"
+                                    {string.Join("", request.Stuffs_In.Select(stuff => $@"
                                         <int:Code>{stuff.Code}</int:Code>
                                         <int:Count>{stuff.Count}</int:Count>
                                         <int:Price>{stuff.Price}</int:Price>
@@ -243,6 +245,73 @@ namespace kashka.Services
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 throw;
             }
+        }
+
+
+        public async Task<ApiResult<TransferOwnershipPlaceResult>> CallTransferRestAsync(
+            TransferOwnershipPlaceRequest requestParam)
+        {
+            string address = " https://pub-cix.ntsw.ir/services/InternalTradeServices?wsdl";
+            string userName = "internalservice";
+            string passWord = "ESBesb12?";
+            object param = requestParam;
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("Authorization", "Basic " + 
+                          Convert.ToBase64String(Encoding.ASCII.GetBytes(userName + ":" + passWord)));
+                    client.DefaultRequestHeaders.Add("content-type", "application/json");
+
+                    string jsonBody = Newtonsoft.Json.JsonConvert.SerializeObject(param);
+                    StringContent content = new StringContent(
+                        jsonBody, Encoding.UTF8, "application/json");
+
+                    HttpResponseMessage response = await client.PostAsync(address, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+
+                        // Check if the request was successful
+                        response.EnsureSuccessStatusCode();
+
+                        // Read and handle the response
+                        string responseBody = await response.Content.ReadAsStringAsync();
+                        ApiResult<TransferOwnershipPlaceResult> apiResult =
+                            Newtonsoft.Json.JsonConvert.DeserializeObject<ApiResult<TransferOwnershipPlaceResult>>(
+                                responseBody);
+
+                        // Check ResultCode for errors
+                        if (apiResult.ResultCode != (int)ResultCodeType.Success)
+                        {
+                            HandleApiError(apiResult.ResultCode, apiResult.ResultMessage);
+                        }
+
+                        return apiResult;
+                    }
+                    else
+                    {
+                        // Handle the error
+                        string errorMessage = await response.Content.ReadAsStringAsync();
+                        HandleApiError((int)response.StatusCode, errorMessage);
+
+                        // You can throw an exception or return an error message based on your requirements
+                        throw new Exception("API request failed.");
+                    }
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                // Handle HTTP request exceptions
+                Console.WriteLine($"HTTP request error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+            return null;
         }
     }
 }

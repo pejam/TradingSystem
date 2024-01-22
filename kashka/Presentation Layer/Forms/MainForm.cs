@@ -8,6 +8,8 @@ using System.Data;
 using kashka.Business_Logic_Layer;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
+using System.Windows.Forms;
+using Azure.Core;
 
 namespace kashka.Presentation_Layer.Forms
 {
@@ -425,9 +427,135 @@ namespace kashka.Presentation_Layer.Forms
             }
         }
 
-        private void btnSend_Click(object sender, EventArgs e)
+
+        private TransferOwnershipPlaceRequest InitializeTransferOwnershipPlaceRequestFromSelectedRow(
+            TransferOwnershipPlaceReport transferOwnershipPlaceReport)
         {
-            CallSubmitRetailService();
+            return new TransferOwnershipPlaceRequest
+            {
+                Username = "Public_User",
+                SrvPass = "A32@sVy%f53Z#g3y",
+                PersonNationalCode = transferOwnershipPlaceReport.BuyerNationalId,
+                //2150248360
+                //Mori1967@
+                PasswordOtpCode = "Mori1967@",
+                UserRoleIDstr = 0,
+                UserSellType = (int)UserSellType.OwnershipAndPlaceTransfer,
+                DocumentDate = ToMiladi(transferOwnershipPlaceReport.DocumentDate),
+                FromPostalCode = transferOwnershipPlaceReport.SourceWarehousePostalCode,
+                OwnershipTransfer = new OwnershipTransfer
+                {
+                    BuyerNationalID = transferOwnershipPlaceReport.BuyerNationalId,
+                    BuyerUserRoleIDStr = transferOwnershipPlaceReport.BuyerBusinessRoleCode,
+                    BuyerName = transferOwnershipPlaceReport.BuyerName,
+                    BuyerMobile = transferOwnershipPlaceReport.MobileNumber
+                },
+                PlaceTransfer = new PlaceTransfer
+                {
+                    ToPostalCode = transferOwnershipPlaceReport.DestinationWarehousePostalCode,
+                    WayBillHas = transferOwnershipPlaceReport.TransportStatus.Equals("بدون بارنامه") ? 2 : 1,
+                    WayBillNumber = transferOwnershipPlaceReport.WaybillNumber,
+                    WayBillSerial = transferOwnershipPlaceReport.WaybillSerial,
+                    /*WayBillDate = (DateTime)(transferOwnershipPlaceReport.WaybillDate != null
+                        ? DateTime.ParseExact(transferOwnershipPlaceReport.WaybillDate, "yyyy/MM/dd", CultureInfo.InvariantCulture)
+                        : (DateTime?)null)*/
+                },
+                Seller_UserRoleExtraFields = new Seller_UserRoleExtraFields
+                {
+                    PostalCode = 0,
+                    LicenseNumber = 0,
+                    ActivityType = (int)ActivityType.None,
+                },
+                Buyer_UserRoleExtraFields = new Buyer_UserRoleExtraFields
+                {
+                    PostalCode = 0,
+                    LicenseNumber = 0,
+                    ActivityType = (int)ActivityType.None,
+                },
+                Stuffs_In = new List<Stuff_Code_Count_Pair>
+                {
+                    new Stuff_Code_Count_Pair
+                    {
+                        Code = transferOwnershipPlaceReport.ItemId,
+                        Count = transferOwnershipPlaceReport.Quantity,
+                        Price = transferOwnershipPlaceReport.UnitPrice,
+                        Discount = transferOwnershipPlaceReport.DiscountAmount,
+                        VAT = transferOwnershipPlaceReport.TaxAndDutyAmount,
+                    }
+                },
+                DocumentDescription = transferOwnershipPlaceReport.DocumentDescription,
+                DocNumber = transferOwnershipPlaceReport.InvoiceNumber,
+                RelatedDocNumber = null, 
+                StockExchangeCode = transferOwnershipPlaceReport.StockExchangeContractNumber,
+                StatusAppointment = 0 // ثبت نهایی
+            };
+        }
+
+        public DateTime ToMiladi(string shamsiDate)
+        {
+            if (shamsiDate == null)
+            {
+                return DateTime.UtcNow;
+            }
+
+            var persianCalendar = new PersianCalendar();
+
+            int year = int.Parse(shamsiDate.Substring(0, 4));
+            int month = int.Parse(shamsiDate.Substring(5, 2));
+            int day = int.Parse(shamsiDate.Substring(8, 2));
+
+            DateTime gregorianDateTime = persianCalendar.ToDateTime(year, month, day, 0, 0, 0, 0).AddHours(12);
+
+            return gregorianDateTime;
+        }
+
+
+        private async void btnSend_Click(object sender, EventArgs e)
+        {
+            if (tabCtrl.SelectedIndex == 0)
+            {
+
+            }
+            else if (tabCtrl.SelectedIndex == 1)
+            {
+                try
+                {
+                    if (dataGridViewTajer.SelectedRows.Count == 1)
+                    {
+                        DataGridViewRow selectedRow = dataGridViewTajer.SelectedRows[0];
+                        TransferOwnershipPlaceReport transferOwnershipPlaceReport =
+                            (TransferOwnershipPlaceReport)selectedRow.DataBoundItem;
+
+                        TransferOwnershipPlaceRequest requestParam = 
+                            InitializeTransferOwnershipPlaceRequestFromSelectedRow(transferOwnershipPlaceReport);
+                        InternalTradeService tradeService = new InternalTradeService(
+                            "serviceUrl"
+                        );
+                        ApiResult<TransferOwnershipPlaceResult> result = await tradeService.CallTransferRestAsync(requestParam);
+                        // Check the result
+                        if (result.ResultCode == 0)
+                        {
+                            // Handle successful result
+                            MessageBox.Show("SubmitRetail method called successfully!");
+                        }
+                        else
+                        {
+                            // Handle API error
+                            MessageBox.Show($"API Error - Result Code: {result.ResultCode}, Result Message: {result.ResultMessage}");
+                        }
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    // Handle HTTP request exceptions
+                    MessageBox.Show($"HTTP request error: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    // Handle other exceptions
+                    MessageBox.Show($"An error occurred: {ex.Message}");
+                }
+            }
         }
 
         #region DB interactions
@@ -607,7 +735,9 @@ namespace kashka.Presentation_Layer.Forms
                             reportData.DocumentDate = reader["تاريخ سند"].ToString();
                             reportData.InvoiceNumber = reader["شماره صورتحساب"].ToString();
                             reportData.BuyerNationalId = reader["کد/شناسه ملي خريدار"].ToString();
-                            reportData.BuyerBusinessRoleCode = reader["کد نقش تجاري خريدار"].ToString();
+                            reportData.BuyerBusinessRoleCode = reader["کد نقش تجاري خريدار"] != DBNull.Value && 
+                                !string.IsNullOrEmpty(reader["کد نقش تجاري خريدار"].ToString())
+                                ? Convert.ToInt32(reader["کد نقش تجاري خريدار"]) : 0;
                             reportData.BuyerName = reader["نام خريدار"].ToString();
                             reportData.MobileNumber = reader["تلفن همراه"].ToString();
                             reportData.SourceWarehousePostalCode = reader["کد پستي انبار مبدا"].ToString();

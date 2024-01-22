@@ -12,6 +12,11 @@ namespace kashka.Enums
     public enum ActivityType
     {
         /// <summary>
+        /// نا مشخص
+        /// </summary>
+        None,
+
+        /// <summary>
         /// وارد کننده
         /// </summary>
         Importer = 1,

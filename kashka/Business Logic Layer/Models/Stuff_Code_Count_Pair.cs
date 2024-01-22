@@ -16,7 +16,7 @@ namespace kashka.Business_Logic_Layer.Models
         /// <summary>
         /// تعداد/مقدار
         /// </summary>
-        public int Count { get; set; }
+        public decimal Count { get; set; }
 
         /// <summary>
         /// مبلغ واحد(ریال)

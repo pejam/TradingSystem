@@ -23,7 +23,7 @@ namespace kashka.Business_Logic_Layer.Models
 
         // کد نقش تجاری خریدار
         [CodePageAttribute(NeedsToConvert = false)]
-        public string BuyerBusinessRoleCode { get; set; }
+        public int BuyerBusinessRoleCode { get; set; }
 
         // نام خریدار
         [CodePageAttribute(NeedsToConvert = true)]

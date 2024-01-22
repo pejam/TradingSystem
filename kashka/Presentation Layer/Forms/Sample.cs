@@ -483,7 +483,7 @@ namespace kashka.Presentation_Layer.Forms
                             reportData.DocumentDate = reader["تاريخ سند"].ToString();
                             reportData.InvoiceNumber = reader["شماره صورتحساب"].ToString();
                             reportData.BuyerNationalId = reader["کد/شناسه ملي خريدار"].ToString();
-                            reportData.BuyerBusinessRoleCode = reader["کد نقش تجاري خريدار"].ToString();
+                            reportData.BuyerBusinessRoleCode = (int)reader["کد نقش تجاري خريدار"];
                             reportData.BuyerName = reader["نام خريدار"].ToString();
                             reportData.MobileNumber = reader["تلفن همراه"].ToString();
                             reportData.SourceWarehousePostalCode = reader["کد پستي انبار مبدا"].ToString();
