@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace kashka.Business_Logic_Layer.Models
 {
-    public class Stuff_Code_Count_Pair
+    public class Stuffs_In
     {
         /// <summary>
         /// شناسه کالا

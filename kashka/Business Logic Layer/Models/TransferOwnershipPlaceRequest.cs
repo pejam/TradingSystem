@@ -75,7 +75,7 @@ namespace kashka.Business_Logic_Layer.Models
         /// <summary>
         /// اطلاعات کالا
         /// </summary>
-        public List<Stuff_Code_Count_Pair> Stuffs_In { get; set; }
+        public List<Stuffs_In> Stuffs_In { get; set; }
 
         /// <summary>
         /// شرح سند

@@ -14,7 +14,7 @@ namespace kashka.Enums
         /// <summary>
         /// نا مشخص
         /// </summary>
-        None,
+        None = 0,
 
         /// <summary>
         /// وارد کننده

@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
 using System.Windows.Forms;
 using Azure.Core;
+using kashka.Utilities;
 
 namespace kashka.Presentation_Layer.Forms
 {
@@ -22,7 +23,8 @@ namespace kashka.Presentation_Layer.Forms
         private List<TransferOwnershipPlaceReport> transferOwnershipPlaceReportList;
 
         private readonly DataRepository dataRepository;
-
+        private string _fromDateGeorgian;
+        private string _untilDateGeorgian;
 
         public MainForm()
         {
@@ -195,9 +197,6 @@ namespace kashka.Presentation_Layer.Forms
             string errorMessage = ValidateParameters();
             if (errorMessage.IsNullOrEmpty())
             {
-                string fromDateGeorgian;
-                string untilDateGeorgian;
-
                 if (fromDatePicker.PersianDate.Year < 2000)
                 {
                     PersianCalendar p = new PersianCalendar();
@@ -207,11 +206,11 @@ namespace kashka.Presentation_Layer.Forms
                         fromDatePicker.PersianDate.Day,
                         0, 0, 0, 0);
 
-                    fromDateGeorgian = $"{x.Year:D4}-{x.Month:D2}-{x.Day:D2}";
+                    _fromDateGeorgian = $"{x.Year:D4}-{x.Month:D2}-{x.Day:D2}";
                 }
                 else
                 {
-                    fromDateGeorgian = fromDatePicker.GeorgianDate.ToString();
+                    _fromDateGeorgian = fromDatePicker.GeorgianDate.ToString();
                 }
 
                 if (untilDatePicker.PersianDate.Year < 2000)
@@ -223,11 +222,11 @@ namespace kashka.Presentation_Layer.Forms
                         untilDatePicker.PersianDate.Day,
                         0, 0, 0, 0);
 
-                    untilDateGeorgian = $"{x.Year:D4}-{x.Month:D2}-{x.Day:D2}";
+                    _untilDateGeorgian = $"{x.Year:D4}-{x.Month:D2}-{x.Day:D2}";
                 }
                 else
                 {
-                    untilDateGeorgian = untilDatePicker.GeorgianDate.ToString();
+                    _untilDateGeorgian = untilDatePicker.GeorgianDate.ToString();
                 }
 
 
@@ -235,7 +234,7 @@ namespace kashka.Presentation_Layer.Forms
                 {
                     BindFinalConsumerReportData(
                         Properties.Settings.Default.FiscalPeriodId,
-                        fromDateGeorgian, untilDateGeorgian,
+                        _fromDateGeorgian, _untilDateGeorgian,
                         Properties.Settings.Default.StockRoomId
                     );
                 }
@@ -243,7 +242,7 @@ namespace kashka.Presentation_Layer.Forms
                 {
                     BindTajerReportData(
                         Properties.Settings.Default.FiscalPeriodId,
-                        fromDateGeorgian, untilDateGeorgian,
+                        _fromDateGeorgian, _untilDateGeorgian,
                         Properties.Settings.Default.StockRoomId
                     );
                 }
@@ -356,76 +355,76 @@ namespace kashka.Presentation_Layer.Forms
             }
         }
 
-        private async void CallSubmitRetailService()
-        {
-            try
-            {
-                // Set your service URL
-                string serviceUrl = "https://pub-cix.ntsw.ir/services/InternalTradeServices?wsdl";
+        //private async void CallSubmitRetailService()
+        //{
+        //    try
+        //    {
+        //        // Set your service URL
+        //        string serviceUrl = "https://pub-cix.ntsw.ir/services/InternalTradeServices?wsdl";
 
-                // Create an instance of the InternalTradeService
-                InternalTradeService tradeService = new InternalTradeService(serviceUrl);
+        //        // Create an instance of the InternalTradeService
+        //        InternalTradeService tradeService = new InternalTradeService(serviceUrl);
 
-                // Populate the request variable with the required data
-                var request = new SubmitRetailRequest
-                {
-                    username = "your_username",
-                    srvPass = "your_srvPass",
-                    password_otpCode = "your_password_otpCode",
-                    PersonNationalID = "seller_national_id",
-                    UserRoleIDstr = "seller_role_id",
-                    UserRoleExtraFields = new UserRoleExtraFields
-                    {
-                        PostalCode = 1234567890,
-                        LicenseNumber = 1234567890,
-                        ActivityType = (int)ActivityType.Wholesaler // Use the appropriate activity type from the enum
-                    },
-                    DocumentDate = DateTime.Now, // Replace with the actual document date
-                    Description = "your_description",
-                    BuyerDatiles = new BuyerDatiles
-                    {
-                        BuyerName = "buyer_name",
-                        BuyerNationalID = "buyer_national_id",
-                        BuyerMobile = "buyer_mobile"
-                    },
-                    PostalCode = "seller_postal_code",
-                    Stuffs_In = new List<StuffIn>
-                    {
-                        new StuffIn { Code = "item_code_1", Count = 10, Price = 100 },
-                        new StuffIn { Code = "item_code_2", Count = 5, Price = 50 }
-                        // Add more items as needed
-                    },
-                    DocNumber = "your_document_number",
-                    statusAppointment = 0, // or 7, based on your requirement
-                    TraceCode = "your_trace_code"
-                };
+        //        // Populate the request variable with the required data
+        //        var request = new SubmitRetailRequest
+        //        {
+        //            username = "your_username",
+        //            srvPass = "your_srvPass",
+        //            password_otpCode = "your_password_otpCode",
+        //            PersonNationalID = "seller_national_id",
+        //            UserRoleIDstr = "seller_role_id",
+        //            UserRoleExtraFields = new UserRoleExtraFields
+        //            {
+        //                PostalCode = 1234567890,
+        //                LicenseNumber = 1234567890,
+        //                ActivityType = (int)ActivityType.Wholesaler // Use the appropriate activity type from the enum
+        //            },
+        //            DocumentDate = DateTime.Now, // Replace with the actual document date
+        //            Description = "your_description",
+        //            BuyerDatiles = new BuyerDatiles
+        //            {
+        //                BuyerName = "buyer_name",
+        //                BuyerNationalID = "buyer_national_id",
+        //                BuyerMobile = "buyer_mobile"
+        //            },
+        //            PostalCode = "seller_postal_code",
+        //            Stuffs_In = new List<StuffIn>
+        //            {
+        //                new StuffIn { Code = "item_code_1", Count = 10, Price = 100 },
+        //                new StuffIn { Code = "item_code_2", Count = 5, Price = 50 }
+        //                // Add more items as needed
+        //            },
+        //            DocNumber = "your_document_number",
+        //            statusAppointment = 0, // or 7, based on your requirement
+        //            TraceCode = "your_trace_code"
+        //        };
 
-                // Call the SubmitRetail method
-                ApiResult<SubmitRetailResult> result = await tradeService.SubmitRetailAsync(request);
+        //        // Call the SubmitRetail method
+        //        ApiResult<SubmitRetailResult> result = await tradeService.SubmitRetailAsync(request);
 
-                // Check the result
-                if (result.ResultCode == 0)
-                {
-                    // Handle successful result
-                    MessageBox.Show("SubmitRetail method called successfully!");
-                }
-                else
-                {
-                    // Handle API error
-                    MessageBox.Show($"API Error - Result Code: {result.ResultCode}, Result Message: {result.ResultMessage}");
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                // Handle HTTP request exceptions
-                MessageBox.Show($"HTTP request error: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                // Handle other exceptions
-                MessageBox.Show($"An error occurred: {ex.Message}");
-            }
-        }
+        //        // Check the result
+        //        if (result.ResultCode == 0)
+        //        {
+        //            // Handle successful result
+        //            MessageBox.Show("SubmitRetail method called successfully!");
+        //        }
+        //        else
+        //        {
+        //            // Handle API error
+        //            MessageBox.Show($"API Error - Result Code: {result.ResultCode}, Result Message: {result.ResultMessage}");
+        //        }
+        //    }
+        //    catch (HttpRequestException ex)
+        //    {
+        //        // Handle HTTP request exceptions
+        //        MessageBox.Show($"HTTP request error: {ex.Message}");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle other exceptions
+        //        MessageBox.Show($"An error occurred: {ex.Message}");
+        //    }
+        //}
 
 
         private TransferOwnershipPlaceRequest InitializeTransferOwnershipPlaceRequestFromSelectedRow(
@@ -446,7 +445,7 @@ namespace kashka.Presentation_Layer.Forms
                 OwnershipTransfer = new OwnershipTransfer
                 {
                     BuyerNationalID = transferOwnershipPlaceReport.BuyerNationalId,
-                    BuyerUserRoleIDStr = transferOwnershipPlaceReport.BuyerBusinessRoleCode,
+                    BuyerUserRoleIDStr = Convert.ToInt32(transferOwnershipPlaceReport.BuyerBusinessRoleCode),
                     BuyerName = transferOwnershipPlaceReport.BuyerName,
                     BuyerMobile = transferOwnershipPlaceReport.MobileNumber
                 },
@@ -472,12 +471,12 @@ namespace kashka.Presentation_Layer.Forms
                     LicenseNumber = 0,
                     ActivityType = (int)ActivityType.None,
                 },
-                Stuffs_In = new List<Stuff_Code_Count_Pair>
+                Stuffs_In = new List<Stuffs_In>
                 {
-                    new Stuff_Code_Count_Pair
+                    new Stuffs_In
                     {
                         Code = transferOwnershipPlaceReport.ItemId,
-                        Count = transferOwnershipPlaceReport.Quantity,
+                        Count = (int)transferOwnershipPlaceReport.Quantity,
                         Price = transferOwnershipPlaceReport.UnitPrice,
                         Discount = transferOwnershipPlaceReport.DiscountAmount,
                         VAT = transferOwnershipPlaceReport.TaxAndDutyAmount,
@@ -485,7 +484,7 @@ namespace kashka.Presentation_Layer.Forms
                 },
                 DocumentDescription = transferOwnershipPlaceReport.DocumentDescription,
                 DocNumber = transferOwnershipPlaceReport.InvoiceNumber,
-                RelatedDocNumber = null, 
+                RelatedDocNumber = null,
                 StockExchangeCode = transferOwnershipPlaceReport.StockExchangeContractNumber,
                 StatusAppointment = 0 // ثبت نهایی
             };
@@ -526,22 +525,24 @@ namespace kashka.Presentation_Layer.Forms
                         TransferOwnershipPlaceReport transferOwnershipPlaceReport =
                             (TransferOwnershipPlaceReport)selectedRow.DataBoundItem;
 
-                        TransferOwnershipPlaceRequest requestParam = 
+                        TransferOwnershipPlaceRequest requestParam =
                             InitializeTransferOwnershipPlaceRequestFromSelectedRow(transferOwnershipPlaceReport);
                         InternalTradeService tradeService = new InternalTradeService(
-                            "serviceUrl"
+                             "https://pub-cix.ntsw.ir/services/InternalTradeServices"
                         );
                         ApiResult<TransferOwnershipPlaceResult> result = await tradeService.CallTransferRestAsync(requestParam);
                         // Check the result
-                        if (result.ResultCode == 0)
+                        if (result!=null &&  result.ResultCode == 0)
                         {
-                            // Handle successful result
-                            MessageBox.Show("SubmitRetail method called successfully!");
-                        }
-                        else
-                        {
-                            // Handle API error
-                            MessageBox.Show($"API Error - Result Code: {result.ResultCode}, Result Message: {result.ResultMessage}");
+                            WebReqLogger.InsertData(new WebReqInfo
+                            {
+                                FiscalPeriodId = Properties.Settings.Default.FiscalPeriodId,
+                                StockRoomId = Properties.Settings.Default.StockRoomId,
+                                UserId = 1,
+                                InvoiceNumber = transferOwnershipPlaceReport.InvoiceNumber,
+                                Status = result.ResultCode,
+                                Message = result.ResultMessage
+                            });
                         }
                     }
                 }
@@ -735,9 +736,9 @@ namespace kashka.Presentation_Layer.Forms
                             reportData.DocumentDate = reader["تاريخ سند"].ToString();
                             reportData.InvoiceNumber = reader["شماره صورتحساب"].ToString();
                             reportData.BuyerNationalId = reader["کد/شناسه ملي خريدار"].ToString();
-                            reportData.BuyerBusinessRoleCode = reader["کد نقش تجاري خريدار"] != DBNull.Value && 
-                                !string.IsNullOrEmpty(reader["کد نقش تجاري خريدار"].ToString())
-                                ? Convert.ToInt32(reader["کد نقش تجاري خريدار"]) : 0;
+                            reportData.BuyerBusinessRoleCode = (reader["کد نقش تجاري خريدار"] != DBNull.Value &&
+                                                                    !string.IsNullOrEmpty(reader["کد نقش تجاري خريدار"].ToString()))
+                                                                         ? Convert.ToInt32(reader["کد نقش تجاري خريدار"].ToString()) : 0;
                             reportData.BuyerName = reader["نام خريدار"].ToString();
                             reportData.MobileNumber = reader["تلفن همراه"].ToString();
                             reportData.SourceWarehousePostalCode = reader["کد پستي انبار مبدا"].ToString();
@@ -818,5 +819,17 @@ namespace kashka.Presentation_Layer.Forms
             return submitRetailReportList;
         }
         #endregion
+
+        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+
     }
 }

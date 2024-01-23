@@ -602,20 +602,20 @@ namespace kashka.Presentation_Layer.Forms
                 };
 
                 // Call the SubmitRetail method
-                ApiResult<SubmitRetailResult> result = await tradeService.SubmitRetailAsync(request);
+                //ApiResult<SubmitRetailResult> result = await tradeService.SubmitRetailAsync(request);
 
                 // Check the result
-                if (result.ResultCode == 0)
-                {
-                    // Handle successful result
-                    MessageBox.Show("SubmitRetail method called successfully!");
-                }
-                else
-                {
-                    // Handle API error
-                    MessageBox.Show(
-                        $"API Error - Result Code: {result.ResultCode}, Result Message: {result.ResultMessage}");
-                }
+                //if (result.ResultCode == 0)
+                //{
+                //    // Handle successful result
+                //    MessageBox.Show("SubmitRetail method called successfully!");
+                //}
+                //else
+                //{
+                //    // Handle API error
+                //    MessageBox.Show(
+                //        $"API Error - Result Code: {result.ResultCode}, Result Message: {result.ResultMessage}");
+                //}
             }
             catch (HttpRequestException ex)
             {
