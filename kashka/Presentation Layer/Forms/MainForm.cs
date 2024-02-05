@@ -486,7 +486,7 @@ namespace kashka.Presentation_Layer.Forms
                 DocNumber = transferOwnershipPlaceReport.InvoiceNumber,
                 RelatedDocNumber = null,
                 StockExchangeCode = transferOwnershipPlaceReport.StockExchangeContractNumber,
-                StatusAppointment = 0 // ثبت نهایی
+                StatusAppointment = 7 // ثبت اولیه
             };
         }
 
@@ -528,11 +528,11 @@ namespace kashka.Presentation_Layer.Forms
                         TransferOwnershipPlaceRequest requestParam =
                             InitializeTransferOwnershipPlaceRequestFromSelectedRow(transferOwnershipPlaceReport);
                         InternalTradeService tradeService = new InternalTradeService(
-                             "https://pub-cix.ntsw.ir/services/InternalTradeServices"
+                             "https://pub-cix.ntsw.ir/services/InternalTradeServices.PUBInternalTradeServicesHttpsSoap11Endpoint"
                         );
-                        ApiResult<TransferOwnershipPlaceResult> result = await tradeService.CallTransferRestAsync(requestParam);
+                        ApiResult<TransferOwnershipPlaceResult> result = await tradeService.CallTransferSoapAsync(requestParam);
                         // Check the result
-                        if (result!=null &&  result.ResultCode == 0)
+                        if (result != null && result.ResultCode == 0)
                         {
                             WebReqLogger.InsertData(new WebReqInfo
                             {
@@ -830,6 +830,9 @@ namespace kashka.Presentation_Layer.Forms
 
         }
 
+        private void splitContainer2_Panel2_Paint(object sender, PaintEventArgs e)
+        {
 
+        }
     }
 }

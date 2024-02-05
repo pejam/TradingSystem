@@ -109,7 +109,7 @@ namespace kashka.Presentation_Layer.Forms
             // 
             txtNumber.Location = new Point(100, 100);
             txtNumber.Name = "txtNumber";
-            txtNumber.Size = new Size(150, 23);
+            txtNumber.Size = new Size(150, 39);
             txtNumber.TabIndex = 0;
             txtNumber.KeyPress += txtNumber_KeyPress;
             // 
@@ -117,11 +117,11 @@ namespace kashka.Presentation_Layer.Forms
             // 
             statusStrip1.ImageScalingSize = new Size(32, 32);
             statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabelVersion });
-            statusStrip1.Location = new Point(0, 516);
+            statusStrip1.Location = new Point(0, 1106);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Padding = new Padding(8, 0, 1, 0);
+            statusStrip1.Padding = new Padding(15, 0, 2, 0);
             statusStrip1.RightToLeft = RightToLeft.Yes;
-            statusStrip1.Size = new Size(989, 22);
+            statusStrip1.Size = new Size(1837, 42);
             statusStrip1.TabIndex = 2;
             statusStrip1.Text = "statusStrip1";
             // 
@@ -129,7 +129,7 @@ namespace kashka.Presentation_Layer.Forms
             // 
             toolStripStatusLabelVersion.Name = "toolStripStatusLabelVersion";
             toolStripStatusLabelVersion.Padding = new Padding(0, 0, 50, 0);
-            toolStripStatusLabelVersion.Size = new Size(102, 17);
+            toolStripStatusLabelVersion.Size = new Size(156, 32);
             toolStripStatusLabelVersion.Tag = "";
             toolStripStatusLabelVersion.Text = "نسخه 1.0";
             // 
@@ -139,23 +139,23 @@ namespace kashka.Presentation_Layer.Forms
             tabCtrl.Controls.Add(tabPageTajer);
             tabCtrl.Dock = DockStyle.Fill;
             tabCtrl.Location = new Point(0, 0);
-            tabCtrl.Margin = new Padding(2, 1, 2, 1);
+            tabCtrl.Margin = new Padding(4, 2, 4, 2);
             tabCtrl.Name = "tabCtrl";
             tabCtrl.RightToLeft = RightToLeft.Yes;
             tabCtrl.RightToLeftLayout = true;
             tabCtrl.SelectedIndex = 0;
-            tabCtrl.Size = new Size(989, 363);
+            tabCtrl.Size = new Size(1837, 777);
             tabCtrl.TabIndex = 3;
             // 
             // tabPageFinalConsumer
             // 
             tabPageFinalConsumer.Controls.Add(dataGridViewFinalConsumer);
             tabPageFinalConsumer.Controls.Add(toolStripFinalConsumer);
-            tabPageFinalConsumer.Location = new Point(4, 24);
-            tabPageFinalConsumer.Margin = new Padding(2, 1, 2, 1);
+            tabPageFinalConsumer.Location = new Point(8, 46);
+            tabPageFinalConsumer.Margin = new Padding(4, 2, 4, 2);
             tabPageFinalConsumer.Name = "tabPageFinalConsumer";
-            tabPageFinalConsumer.Padding = new Padding(2, 1, 2, 1);
-            tabPageFinalConsumer.Size = new Size(981, 335);
+            tabPageFinalConsumer.Padding = new Padding(4, 2, 4, 2);
+            tabPageFinalConsumer.Size = new Size(1821, 723);
             tabPageFinalConsumer.TabIndex = 1;
             tabPageFinalConsumer.Text = "گزارش مصرف کننده نهایی";
             tabPageFinalConsumer.UseVisualStyleBackColor = true;
@@ -166,8 +166,8 @@ namespace kashka.Presentation_Layer.Forms
             dataGridViewFinalConsumer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewFinalConsumer.Columns.AddRange(new DataGridViewColumn[] { CheckBoxFinalConsumer });
             dataGridViewFinalConsumer.Dock = DockStyle.Fill;
-            dataGridViewFinalConsumer.Location = new Point(2, 1);
-            dataGridViewFinalConsumer.Margin = new Padding(1);
+            dataGridViewFinalConsumer.Location = new Point(4, 2);
+            dataGridViewFinalConsumer.Margin = new Padding(2, 2, 2, 2);
             dataGridViewFinalConsumer.Name = "dataGridViewFinalConsumer";
             dataGridViewFinalConsumer.ReadOnly = true;
             dataGridViewFinalConsumer.RowHeadersVisible = false;
@@ -176,7 +176,7 @@ namespace kashka.Presentation_Layer.Forms
             dataGridViewFinalConsumer.RowsDefaultCellStyle = dataGridViewCellStyle1;
             dataGridViewFinalConsumer.RowTemplate.Height = 55;
             dataGridViewFinalConsumer.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewFinalConsumer.Size = new Size(977, 333);
+            dataGridViewFinalConsumer.Size = new Size(1813, 719);
             dataGridViewFinalConsumer.TabIndex = 15;
             // 
             // CheckBoxFinalConsumer
@@ -191,15 +191,16 @@ namespace kashka.Presentation_Layer.Forms
             CheckBoxFinalConsumer.Resizable = DataGridViewTriState.False;
             CheckBoxFinalConsumer.TrueValue = "";
             CheckBoxFinalConsumer.Visible = false;
+            CheckBoxFinalConsumer.Width = 200;
             // 
             // toolStripFinalConsumer
             // 
             toolStripFinalConsumer.ImageScalingSize = new Size(25, 25);
             toolStripFinalConsumer.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3, toolStripButton4, toolStripButton5, toolStripSeparator2, toolStripLabel1, toolStripLabel2 });
-            toolStripFinalConsumer.Location = new Point(2, 1);
+            toolStripFinalConsumer.Location = new Point(4, 2);
             toolStripFinalConsumer.Name = "toolStripFinalConsumer";
-            toolStripFinalConsumer.Padding = new Padding(0, 0, 2, 0);
-            toolStripFinalConsumer.Size = new Size(931, 18);
+            toolStripFinalConsumer.Padding = new Padding(0, 0, 4, 0);
+            toolStripFinalConsumer.Size = new Size(1729, 38);
             toolStripFinalConsumer.TabIndex = 14;
             toolStripFinalConsumer.Text = "toolStrip1";
             toolStripFinalConsumer.Visible = false;
@@ -210,7 +211,7 @@ namespace kashka.Presentation_Layer.Forms
             toolStripButton1.Image = (Image)resources.GetObject("toolStripButton1.Image");
             toolStripButton1.ImageTransparentColor = Color.Magenta;
             toolStripButton1.Name = "toolStripButton1";
-            toolStripButton1.Size = new Size(29, 15);
+            toolStripButton1.Size = new Size(46, 32);
             toolStripButton1.Text = "لغو انتخاب ها";
             // 
             // toolStripButton2
@@ -220,7 +221,7 @@ namespace kashka.Presentation_Layer.Forms
             toolStripButton2.Image = (Image)resources.GetObject("toolStripButton2.Image");
             toolStripButton2.ImageTransparentColor = Color.Magenta;
             toolStripButton2.Name = "toolStripButton2";
-            toolStripButton2.Size = new Size(29, 15);
+            toolStripButton2.Size = new Size(46, 32);
             toolStripButton2.Text = "انتخاب همه موارد";
             // 
             // toolStripButton3
@@ -230,7 +231,7 @@ namespace kashka.Presentation_Layer.Forms
             toolStripButton3.Image = (Image)resources.GetObject("toolStripButton3.Image");
             toolStripButton3.ImageTransparentColor = Color.Magenta;
             toolStripButton3.Name = "toolStripButton3";
-            toolStripButton3.Size = new Size(29, 15);
+            toolStripButton3.Size = new Size(46, 32);
             toolStripButton3.Text = "حذف موارد";
             // 
             // toolStripButton4
@@ -241,7 +242,7 @@ namespace kashka.Presentation_Layer.Forms
             toolStripButton4.Image = (Image)resources.GetObject("toolStripButton4.Image");
             toolStripButton4.ImageTransparentColor = Color.Magenta;
             toolStripButton4.Name = "toolStripButton4";
-            toolStripButton4.Size = new Size(29, 15);
+            toolStripButton4.Size = new Size(46, 32);
             toolStripButton4.Text = "بازیابی اطلاعات از دیتابیس";
             // 
             // toolStripButton5
@@ -250,34 +251,34 @@ namespace kashka.Presentation_Layer.Forms
             toolStripButton5.Image = (Image)resources.GetObject("toolStripButton5.Image");
             toolStripButton5.ImageTransparentColor = Color.Magenta;
             toolStripButton5.Name = "toolStripButton5";
-            toolStripButton5.Size = new Size(29, 15);
+            toolStripButton5.Size = new Size(46, 32);
             toolStripButton5.Text = "مشاهده تمامی فیلدها";
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(6, 18);
+            toolStripSeparator2.Size = new Size(6, 38);
             // 
             // toolStripLabel1
             // 
             toolStripLabel1.Name = "toolStripLabel1";
-            toolStripLabel1.Size = new Size(153, 15);
+            toolStripLabel1.Size = new Size(309, 32);
             toolStripLabel1.Text = "شماره آخرین مورد ارسال شده:";
             // 
             // toolStripLabel2
             // 
             toolStripLabel2.Name = "toolStripLabel2";
-            toolStripLabel2.Size = new Size(0, 15);
+            toolStripLabel2.Size = new Size(0, 32);
             // 
             // tabPageTajer
             // 
             tabPageTajer.Controls.Add(dataGridViewTajer);
             tabPageTajer.Controls.Add(toolStripTajer);
-            tabPageTajer.Location = new Point(4, 24);
-            tabPageTajer.Margin = new Padding(2, 1, 2, 1);
+            tabPageTajer.Location = new Point(8, 46);
+            tabPageTajer.Margin = new Padding(4, 2, 4, 2);
             tabPageTajer.Name = "tabPageTajer";
-            tabPageTajer.Padding = new Padding(2, 1, 2, 1);
-            tabPageTajer.Size = new Size(981, 335);
+            tabPageTajer.Padding = new Padding(4, 2, 4, 2);
+            tabPageTajer.Size = new Size(1821, 720);
             tabPageTajer.TabIndex = 0;
             tabPageTajer.Text = "گزارش تاجر";
             tabPageTajer.UseVisualStyleBackColor = true;
@@ -288,8 +289,8 @@ namespace kashka.Presentation_Layer.Forms
             dataGridViewTajer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewTajer.Columns.AddRange(new DataGridViewColumn[] { CheckBox });
             dataGridViewTajer.Dock = DockStyle.Fill;
-            dataGridViewTajer.Location = new Point(2, 1);
-            dataGridViewTajer.Margin = new Padding(1);
+            dataGridViewTajer.Location = new Point(4, 2);
+            dataGridViewTajer.Margin = new Padding(2, 2, 2, 2);
             dataGridViewTajer.Name = "dataGridViewTajer";
             dataGridViewTajer.ReadOnly = true;
             dataGridViewTajer.RowHeadersVisible = false;
@@ -298,7 +299,7 @@ namespace kashka.Presentation_Layer.Forms
             dataGridViewTajer.RowsDefaultCellStyle = dataGridViewCellStyle2;
             dataGridViewTajer.RowTemplate.Height = 55;
             dataGridViewTajer.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewTajer.Size = new Size(977, 333);
+            dataGridViewTajer.Size = new Size(1813, 716);
             dataGridViewTajer.TabIndex = 14;
             // 
             // CheckBox
@@ -313,16 +314,17 @@ namespace kashka.Presentation_Layer.Forms
             CheckBox.Resizable = DataGridViewTriState.False;
             CheckBox.TrueValue = "";
             CheckBox.Visible = false;
+            CheckBox.Width = 200;
             // 
             // toolStripTajer
             // 
             toolStripTajer.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             toolStripTajer.ImageScalingSize = new Size(25, 25);
             toolStripTajer.Items.AddRange(new ToolStripItem[] { toolStripButtonDeselectAll, toolStripButtonSellectAll, toolStripButtonDeleteInvoices, toolStripButtonRefreshDB, toolStripButtonShowDetails, toolStripSeparator1, toolStripLabelLastSended, toolStripLabelLastSendedNo });
-            toolStripTajer.Location = new Point(2, 1);
+            toolStripTajer.Location = new Point(4, 2);
             toolStripTajer.Name = "toolStripTajer";
-            toolStripTajer.Padding = new Padding(0, 0, 2, 0);
-            toolStripTajer.Size = new Size(931, 18);
+            toolStripTajer.Padding = new Padding(0, 0, 4, 0);
+            toolStripTajer.Size = new Size(1729, 38);
             toolStripTajer.TabIndex = 13;
             toolStripTajer.Text = "toolStripHeader";
             toolStripTajer.Visible = false;
@@ -333,7 +335,7 @@ namespace kashka.Presentation_Layer.Forms
             toolStripButtonDeselectAll.Image = (Image)resources.GetObject("toolStripButtonDeselectAll.Image");
             toolStripButtonDeselectAll.ImageTransparentColor = Color.Magenta;
             toolStripButtonDeselectAll.Name = "toolStripButtonDeselectAll";
-            toolStripButtonDeselectAll.Size = new Size(29, 15);
+            toolStripButtonDeselectAll.Size = new Size(46, 32);
             toolStripButtonDeselectAll.Text = "لغو انتخاب ها";
             // 
             // toolStripButtonSellectAll
@@ -343,7 +345,7 @@ namespace kashka.Presentation_Layer.Forms
             toolStripButtonSellectAll.Image = (Image)resources.GetObject("toolStripButtonSellectAll.Image");
             toolStripButtonSellectAll.ImageTransparentColor = Color.Magenta;
             toolStripButtonSellectAll.Name = "toolStripButtonSellectAll";
-            toolStripButtonSellectAll.Size = new Size(29, 15);
+            toolStripButtonSellectAll.Size = new Size(46, 32);
             toolStripButtonSellectAll.Text = "انتخاب همه موارد";
             // 
             // toolStripButtonDeleteInvoices
@@ -353,7 +355,7 @@ namespace kashka.Presentation_Layer.Forms
             toolStripButtonDeleteInvoices.Image = (Image)resources.GetObject("toolStripButtonDeleteInvoices.Image");
             toolStripButtonDeleteInvoices.ImageTransparentColor = Color.Magenta;
             toolStripButtonDeleteInvoices.Name = "toolStripButtonDeleteInvoices";
-            toolStripButtonDeleteInvoices.Size = new Size(29, 15);
+            toolStripButtonDeleteInvoices.Size = new Size(46, 32);
             toolStripButtonDeleteInvoices.Text = "حذف موارد";
             // 
             // toolStripButtonRefreshDB
@@ -364,7 +366,7 @@ namespace kashka.Presentation_Layer.Forms
             toolStripButtonRefreshDB.Image = (Image)resources.GetObject("toolStripButtonRefreshDB.Image");
             toolStripButtonRefreshDB.ImageTransparentColor = Color.Magenta;
             toolStripButtonRefreshDB.Name = "toolStripButtonRefreshDB";
-            toolStripButtonRefreshDB.Size = new Size(29, 15);
+            toolStripButtonRefreshDB.Size = new Size(46, 32);
             toolStripButtonRefreshDB.Text = "بازیابی اطلاعات از دیتابیس";
             // 
             // toolStripButtonShowDetails
@@ -373,34 +375,34 @@ namespace kashka.Presentation_Layer.Forms
             toolStripButtonShowDetails.Image = (Image)resources.GetObject("toolStripButtonShowDetails.Image");
             toolStripButtonShowDetails.ImageTransparentColor = Color.Magenta;
             toolStripButtonShowDetails.Name = "toolStripButtonShowDetails";
-            toolStripButtonShowDetails.Size = new Size(29, 15);
+            toolStripButtonShowDetails.Size = new Size(46, 32);
             toolStripButtonShowDetails.Text = "مشاهده تمامی فیلدها";
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(6, 18);
+            toolStripSeparator1.Size = new Size(6, 38);
             // 
             // toolStripLabelLastSended
             // 
             toolStripLabelLastSended.Name = "toolStripLabelLastSended";
-            toolStripLabelLastSended.Size = new Size(204, 15);
+            toolStripLabelLastSended.Size = new Size(412, 32);
             toolStripLabelLastSended.Text = "شماره آخرین مورد ارسال شده:";
             // 
             // toolStripLabelLastSendedNo
             // 
             toolStripLabelLastSendedNo.Name = "toolStripLabelLastSendedNo";
-            toolStripLabelLastSendedNo.Size = new Size(0, 15);
+            toolStripLabelLastSendedNo.Size = new Size(0, 32);
             // 
             // btnSend
             // 
             btnSend.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnSend.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSend.Location = new Point(6, 13);
-            btnSend.Margin = new Padding(1);
+            btnSend.Location = new Point(11, 29);
+            btnSend.Margin = new Padding(2, 2, 2, 2);
             btnSend.Name = "btnSend";
             btnSend.RightToLeft = RightToLeft.Yes;
-            btnSend.Size = new Size(59, 25);
+            btnSend.Size = new Size(110, 53);
             btnSend.TabIndex = 10;
             btnSend.Tag = "ارسال";
             btnSend.Text = "ارسال";
@@ -410,30 +412,30 @@ namespace kashka.Presentation_Layer.Forms
             // txtStockRoom
             // 
             txtStockRoom.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            txtStockRoom.Location = new Point(693, 76);
-            txtStockRoom.Margin = new Padding(2);
+            txtStockRoom.Location = new Point(1287, 162);
+            txtStockRoom.Margin = new Padding(4, 4, 4, 4);
             txtStockRoom.Name = "txtStockRoom";
-            txtStockRoom.Size = new Size(167, 23);
+            txtStockRoom.Size = new Size(307, 39);
             txtStockRoom.TabIndex = 29;
             txtStockRoom.TextAlign = HorizontalAlignment.Center;
             // 
             // txtFiscalPeriod
             // 
             txtFiscalPeriod.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            txtFiscalPeriod.Location = new Point(693, 39);
-            txtFiscalPeriod.Margin = new Padding(2);
+            txtFiscalPeriod.Location = new Point(1287, 83);
+            txtFiscalPeriod.Margin = new Padding(4, 4, 4, 4);
             txtFiscalPeriod.Name = "txtFiscalPeriod";
-            txtFiscalPeriod.Size = new Size(167, 23);
+            txtFiscalPeriod.Size = new Size(307, 39);
             txtFiscalPeriod.TabIndex = 28;
             txtFiscalPeriod.TextAlign = HorizontalAlignment.Center;
             // 
             // btnStockRoom
             // 
             btnStockRoom.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnStockRoom.Location = new Point(539, 76);
-            btnStockRoom.Margin = new Padding(2);
+            btnStockRoom.Location = new Point(1001, 162);
+            btnStockRoom.Margin = new Padding(4, 4, 4, 4);
             btnStockRoom.Name = "btnStockRoom";
-            btnStockRoom.Size = new Size(79, 26);
+            btnStockRoom.Size = new Size(147, 55);
             btnStockRoom.TabIndex = 27;
             btnStockRoom.Text = "انتخاب";
             btnStockRoom.UseVisualStyleBackColor = true;
@@ -442,10 +444,10 @@ namespace kashka.Presentation_Layer.Forms
             // btnFiscalPeriod
             // 
             btnFiscalPeriod.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnFiscalPeriod.Location = new Point(539, 40);
-            btnFiscalPeriod.Margin = new Padding(2);
+            btnFiscalPeriod.Location = new Point(1001, 85);
+            btnFiscalPeriod.Margin = new Padding(4, 4, 4, 4);
             btnFiscalPeriod.Name = "btnFiscalPeriod";
-            btnFiscalPeriod.Size = new Size(79, 26);
+            btnFiscalPeriod.Size = new Size(147, 55);
             btnFiscalPeriod.TabIndex = 26;
             btnFiscalPeriod.Text = "انتخاب";
             btnFiscalPeriod.UseVisualStyleBackColor = true;
@@ -454,20 +456,20 @@ namespace kashka.Presentation_Layer.Forms
             // txtWorkSpace
             // 
             txtWorkSpace.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            txtWorkSpace.Location = new Point(693, 5);
-            txtWorkSpace.Margin = new Padding(2);
+            txtWorkSpace.Location = new Point(1287, 11);
+            txtWorkSpace.Margin = new Padding(4, 4, 4, 4);
             txtWorkSpace.Name = "txtWorkSpace";
-            txtWorkSpace.Size = new Size(167, 23);
+            txtWorkSpace.Size = new Size(307, 39);
             txtWorkSpace.TabIndex = 25;
             txtWorkSpace.TextAlign = HorizontalAlignment.Center;
             // 
             // btnWorkSpace
             // 
             btnWorkSpace.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnWorkSpace.Location = new Point(539, 6);
-            btnWorkSpace.Margin = new Padding(2);
+            btnWorkSpace.Location = new Point(1001, 13);
+            btnWorkSpace.Margin = new Padding(4, 4, 4, 4);
             btnWorkSpace.Name = "btnWorkSpace";
-            btnWorkSpace.Size = new Size(79, 26);
+            btnWorkSpace.Size = new Size(147, 55);
             btnWorkSpace.TabIndex = 24;
             btnWorkSpace.Text = "انتخاب";
             btnWorkSpace.UseVisualStyleBackColor = true;
@@ -477,10 +479,10 @@ namespace kashka.Presentation_Layer.Forms
             // 
             lblStockRoom.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblStockRoom.AutoSize = true;
-            lblStockRoom.Location = new Point(917, 78);
-            lblStockRoom.Margin = new Padding(2, 0, 2, 0);
+            lblStockRoom.Location = new Point(1703, 166);
+            lblStockRoom.Margin = new Padding(4, 0, 4, 0);
             lblStockRoom.Name = "lblStockRoom";
-            lblStockRoom.Size = new Size(26, 15);
+            lblStockRoom.Size = new Size(52, 32);
             lblStockRoom.TabIndex = 23;
             lblStockRoom.Text = "انبار";
             // 
@@ -488,10 +490,10 @@ namespace kashka.Presentation_Layer.Forms
             // 
             lblFiscalPeriod.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblFiscalPeriod.AutoSize = true;
-            lblFiscalPeriod.Location = new Point(886, 42);
-            lblFiscalPeriod.Margin = new Padding(2, 0, 2, 0);
+            lblFiscalPeriod.Location = new Point(1645, 90);
+            lblFiscalPeriod.Margin = new Padding(4, 0, 4, 0);
             lblFiscalPeriod.Name = "lblFiscalPeriod";
-            lblFiscalPeriod.Size = new Size(56, 15);
+            lblFiscalPeriod.Size = new Size(113, 32);
             lblFiscalPeriod.TabIndex = 22;
             lblFiscalPeriod.Text = "دوره مالی";
             // 
@@ -499,10 +501,10 @@ namespace kashka.Presentation_Layer.Forms
             // 
             lblWorkSpace.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblWorkSpace.AutoSize = true;
-            lblWorkSpace.Location = new Point(904, 8);
-            lblWorkSpace.Margin = new Padding(2, 0, 2, 0);
+            lblWorkSpace.Location = new Point(1679, 17);
+            lblWorkSpace.Margin = new Padding(4, 0, 4, 0);
             lblWorkSpace.Name = "lblWorkSpace";
-            lblWorkSpace.Size = new Size(37, 15);
+            lblWorkSpace.Size = new Size(74, 32);
             lblWorkSpace.TabIndex = 21;
             lblWorkSpace.Text = "شرکت";
             // 
@@ -512,33 +514,33 @@ namespace kashka.Presentation_Layer.Forms
             fromDatePicker.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             fromDatePicker.BackColor = Color.White;
             fromDatePicker.GeorgianDate = null;
-            fromDatePicker.Location = new Point(25, 7);
+            fromDatePicker.Location = new Point(46, 15);
             fromDatePicker.Margin = new Padding(0);
             fromDatePicker.Name = "fromDatePicker";
             fromDatePicker.PersianDate.Day = 0;
             fromDatePicker.PersianDate.Month = 0;
             fromDatePicker.PersianDate.Year = 0;
             fromDatePicker.RightToLeft = RightToLeft.Yes;
-            fromDatePicker.Size = new Size(288, 24);
+            fromDatePicker.Size = new Size(530, 48);
             fromDatePicker.TabIndex = 33;
             // 
             // lblFrom
             // 
             lblFrom.AutoSize = true;
-            lblFrom.Location = new Point(350, 12);
-            lblFrom.Margin = new Padding(2, 0, 2, 0);
+            lblFrom.Location = new Point(650, 26);
+            lblFrom.Margin = new Padding(4, 0, 4, 0);
             lblFrom.Name = "lblFrom";
-            lblFrom.Size = new Size(60, 15);
+            lblFrom.Size = new Size(121, 32);
             lblFrom.TabIndex = 32;
             lblFrom.Text = "تاریخ شروع";
             // 
             // lblUntil
             // 
             lblUntil.AutoSize = true;
-            lblUntil.Location = new Point(355, 46);
-            lblUntil.Margin = new Padding(2, 0, 2, 0);
+            lblUntil.Location = new Point(659, 98);
+            lblUntil.Margin = new Padding(4, 0, 4, 0);
             lblUntil.Name = "lblUntil";
-            lblUntil.Size = new Size(56, 15);
+            lblUntil.Size = new Size(113, 32);
             lblUntil.TabIndex = 31;
             lblUntil.Text = "تاریخ پایان";
             // 
@@ -548,22 +550,22 @@ namespace kashka.Presentation_Layer.Forms
             untilDatePicker.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             untilDatePicker.BackColor = Color.White;
             untilDatePicker.GeorgianDate = null;
-            untilDatePicker.Location = new Point(25, 43);
+            untilDatePicker.Location = new Point(46, 92);
             untilDatePicker.Margin = new Padding(0);
             untilDatePicker.Name = "untilDatePicker";
             untilDatePicker.PersianDate.Day = 0;
             untilDatePicker.PersianDate.Month = 0;
             untilDatePicker.PersianDate.Year = 0;
             untilDatePicker.RightToLeft = RightToLeft.Yes;
-            untilDatePicker.Size = new Size(288, 24);
+            untilDatePicker.Size = new Size(530, 48);
             untilDatePicker.TabIndex = 30;
             // 
             // btnReport
             // 
-            btnReport.Location = new Point(25, 76);
-            btnReport.Margin = new Padding(2);
+            btnReport.Location = new Point(46, 162);
+            btnReport.Margin = new Padding(4, 4, 4, 4);
             btnReport.Name = "btnReport";
-            btnReport.Size = new Size(170, 26);
+            btnReport.Size = new Size(316, 55);
             btnReport.TabIndex = 34;
             btnReport.Text = "نمایش گزارش";
             btnReport.UseVisualStyleBackColor = true;
@@ -573,6 +575,7 @@ namespace kashka.Presentation_Layer.Forms
             // 
             splitContainer1.Dock = DockStyle.Fill;
             splitContainer1.Location = new Point(0, 0);
+            splitContainer1.Margin = new Padding(6, 6, 6, 6);
             splitContainer1.Name = "splitContainer1";
             splitContainer1.Orientation = Orientation.Horizontal;
             // 
@@ -597,14 +600,16 @@ namespace kashka.Presentation_Layer.Forms
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(splitContainer2);
-            splitContainer1.Size = new Size(989, 516);
-            splitContainer1.SplitterDistance = 106;
+            splitContainer1.Size = new Size(1837, 1106);
+            splitContainer1.SplitterDistance = 227;
+            splitContainer1.SplitterWidth = 9;
             splitContainer1.TabIndex = 36;
             // 
             // splitContainer2
             // 
             splitContainer2.Dock = DockStyle.Fill;
             splitContainer2.Location = new Point(0, 0);
+            splitContainer2.Margin = new Padding(6, 6, 6, 6);
             splitContainer2.Name = "splitContainer2";
             splitContainer2.Orientation = Orientation.Horizontal;
             // 
@@ -616,26 +621,29 @@ namespace kashka.Presentation_Layer.Forms
             // 
             splitContainer2.Panel2.Controls.Add(progressBar);
             splitContainer2.Panel2.Controls.Add(btnSend);
-            splitContainer2.Size = new Size(989, 406);
-            splitContainer2.SplitterDistance = 363;
+            splitContainer2.Panel2.Paint += splitContainer2_Panel2_Paint;
+            splitContainer2.Size = new Size(1837, 870);
+            splitContainer2.SplitterDistance = 777;
+            splitContainer2.SplitterWidth = 9;
             splitContainer2.TabIndex = 0;
             // 
             // progressBar
             // 
             progressBar.Dock = DockStyle.Top;
             progressBar.Location = new Point(0, 0);
+            progressBar.Margin = new Padding(6, 6, 6, 6);
             progressBar.Name = "progressBar";
-            progressBar.Size = new Size(989, 10);
+            progressBar.Size = new Size(1837, 21);
             progressBar.TabIndex = 11;
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(989, 538);
+            ClientSize = new Size(1837, 1148);
             Controls.Add(splitContainer1);
             Controls.Add(statusStrip1);
-            Margin = new Padding(2);
+            Margin = new Padding(4, 4, 4, 4);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Load += MainForm_Load;

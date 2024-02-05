@@ -222,8 +222,16 @@ namespace kashka.Services
             // Create the HTTP client
             using (var client = new HttpClient())
             {
-                var json = Newtonsoft.Json.JsonConvert.SerializeObject(requestParam);
-                var data = new StringContent(json, Encoding.UTF8, "application/json");
+                // var json = Newtonsoft.Json.JsonConvert.SerializeObject(requestParam);
+                // var data = new StringContent(json, Encoding.UTF8, "application/json");
+                var properties = typeof(TransferOwnershipPlaceRequest).GetProperties()
+                    .Where(prop => prop.CanRead)
+                    .ToDictionary(
+                        prop => prop.Name,
+                        prop => prop.GetValue(requestParam, null)?.ToString() ?? ""
+                    );
+
+                var data = new FormUrlEncodedContent(properties);
 
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -263,5 +271,85 @@ namespace kashka.Services
                 }
             }
         }
+
+        internal async Task<ApiResult<TransferOwnershipPlaceResult>> CallTransferSoapAsync(TransferOwnershipPlaceRequest requestParam)
+        {
+            try
+            {
+                // Assuming you have a method to serialize the TransferOwnershipPlaceRequest object to XML
+                string serializedRequest = SerializeTransferOwnershipPlaceRequestToXml(requestParam);
+
+                // Define the SOAP envelope structure
+                string soapEnvelope = $@"
+                                    <soapenv:Envelope xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/' xmlns:int='http://schemas.datacontract.org/'>
+                                       <soapenv:Header/>
+                                       <soapenv:Body>
+                                          <int:TransferOwnershipPlace_SI>
+                                             {serializedRequest}
+                                          </int:TransferOwnershipPlace_SI>
+                                       </soapenv:Body>
+                                    </soapenv:Envelope>";
+
+                // Send the SOAP XML request to the SOAP service endpoint
+                // Send the SOAP XML request to the SOAP service endpoint
+                using (var client = new HttpClient())
+                {
+                    // Set the Authorization header
+                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes("internalservice" + ":" + "ESBesb12?")));
+                    client.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
+                    client.DefaultRequestHeaders.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes("internalservice" + ":" + "ESBesb12?")));
+
+                    var content = new StringContent(soapEnvelope, Encoding.UTF8, "text/xml");
+                    var response = await client.PostAsync(serviceUrl, content);
+
+                    // Process the SOAP XML response
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseXml = await response.Content.ReadAsStringAsync();
+                        return DeserializeSoapResponseToObject(responseXml);
+                        // Do something with responseObj
+                    }
+                    else return null;
+
+                    //else
+                    //{
+                    //    // Handle the error
+                    //    HandleApiError((int)response.StatusCode, await response.Content.ReadAsStringAsync());
+                    //}
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleApiError(-1, ex.Message);
+                return null;
+            }
+        }
+
+
+        public string SerializeTransferOwnershipPlaceRequestToXml(TransferOwnershipPlaceRequest request)
+        {
+            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+            ns.Add("ns4", "http://schemas.datacontract.org/2004/07/InternalTradePrototypes.Models.ViewModels.SI");
+            ns.Add("ns8", "http://schemas.datacontract.org/2004/07/InternalTradePrototypes.Models.ExtraClasses");
+            ns.Add("ns7", "http://schemas.datacontract.org/2004/07/InternalTradeServices.Results.ViewModels");
+
+            XmlSerializer serializer = new XmlSerializer(typeof(TransferOwnershipPlaceRequest));
+            StringBuilder sb = new StringBuilder();
+            using (XmlWriter writer = XmlWriter.Create(sb, new XmlWriterSettings { OmitXmlDeclaration = true }))
+            {
+                serializer.Serialize(writer, request, ns);
+            }
+            return sb.ToString();
+        }
+
+        public ApiResult<TransferOwnershipPlaceResult> DeserializeSoapResponseToObject(string xml)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(ApiResult<TransferOwnershipPlaceResult>));
+            using (StringReader textReader = new StringReader(xml))
+            {
+                return (ApiResult<TransferOwnershipPlaceResult>)serializer.Deserialize(textReader);
+            }
+        }
+
     }
 }
