@@ -5,8 +5,6 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "kashka", "kashka\kashka.csproj", "{FE77CD09-DE49-4FAD-9931-1604854046F9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SamanConvertor", "SamanConverter\SamanConvertor.csproj", "{AEEE8951-79CC-478C-8072-DA02DB07D255}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{FE77CD09-DE49-4FAD-9931-1604854046F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE77CD09-DE49-4FAD-9931-1604854046F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE77CD09-DE49-4FAD-9931-1604854046F9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AEEE8951-79CC-478C-8072-DA02DB07D255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AEEE8951-79CC-478C-8072-DA02DB07D255}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AEEE8951-79CC-478C-8072-DA02DB07D255}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AEEE8951-79CC-478C-8072-DA02DB07D255}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
