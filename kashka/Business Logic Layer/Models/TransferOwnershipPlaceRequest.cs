@@ -45,7 +45,7 @@ namespace kashka.Business_Logic_Layer.Models
         /// <summary>
         /// تاریخ سند*
         /// </summary>
-        public DateTime DocumentDate { get; set; }
+        public String DocumentDate { get; set; }
 
         /// <summary>
         /// کد پستی مبدا*

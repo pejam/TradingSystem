@@ -592,7 +592,6 @@ namespace kashka.Presentation_Layer.Forms
             splitContainer1.Panel1.Controls.Add(btnWorkSpace);
             splitContainer1.Panel1.Controls.Add(lblWorkSpace);
             splitContainer1.Panel1.Controls.Add(btnFiscalPeriod);
-            splitContainer1.Panel1.Paint += splitContainer1_Panel1_Paint;
             // 
             // splitContainer1.Panel2
             // 
@@ -638,7 +637,6 @@ namespace kashka.Presentation_Layer.Forms
             Margin = new Padding(2);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Load += MainForm_Load;
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             tabCtrl.ResumeLayout(false);

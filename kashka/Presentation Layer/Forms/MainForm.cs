@@ -59,6 +59,8 @@ namespace kashka.Presentation_Layer.Forms
             }
         }
 
+        #region Filter Form
+
         private void btnWorkSpace_Click(object sender, EventArgs e)
         {
             WorkSpace workSpace = ShowListDialog<WorkSpace>(GetWorkSpaceData());
@@ -288,6 +290,10 @@ namespace kashka.Presentation_Layer.Forms
             return errorMessage;
         }
 
+        #endregion Filter Form
+
+        #region BindGrid
+
         private void BindFinalConsumerReportData(
             int pFPID, string pSTARTDATE, string pENDDATE, int pSTOCKID
             )
@@ -354,6 +360,10 @@ namespace kashka.Presentation_Layer.Forms
                 dataGridViewFinalConsumer.Columns[HGI.Key].Visible = (!HGI.Value.IsDetail || Properties.Settings.Default.ShowDetails);
             }
         }
+
+        #endregion BindGrid
+
+
 
         //private async void CallSubmitRetailService()
         //{
@@ -430,7 +440,12 @@ namespace kashka.Presentation_Layer.Forms
         private TransferOwnershipPlaceRequest InitializeTransferOwnershipPlaceRequestFromSelectedRow(
             TransferOwnershipPlaceReport transferOwnershipPlaceReport)
         {
-            return new TransferOwnershipPlaceRequest
+
+            DateTime gregorianDate = PersianToGregorian(transferOwnershipPlaceReport.DocumentDate);
+            string DocDate = gregorianDate.ToString("yyyy-MM-dd");
+            DocDate = "2024-01-02";
+
+            TransferOwnershipPlaceRequest transferOwnershipPlaceRequest = new TransferOwnershipPlaceRequest
             {
                 Username = "Public_User",
                 SrvPass = "A32@sVy%f53Z#g3y",
@@ -439,8 +454,9 @@ namespace kashka.Presentation_Layer.Forms
                 //Mori1967@
                 PasswordOtpCode = "Mori1967@",
                 UserRoleIDstr = 0,
-                UserSellType = (int)UserSellType.OwnershipAndPlaceTransfer,
-                DocumentDate = ToMiladi(transferOwnershipPlaceReport.DocumentDate),
+                UserSellType = (int)UserSellType.OwnershipTransfer,
+                //DocumentDate = ToMiladi(transferOwnershipPlaceReport.DocumentDate),
+                DocumentDate = DocDate,
                 FromPostalCode = transferOwnershipPlaceReport.SourceWarehousePostalCode,
                 OwnershipTransfer = new OwnershipTransfer
                 {
@@ -486,8 +502,14 @@ namespace kashka.Presentation_Layer.Forms
                 DocNumber = transferOwnershipPlaceReport.InvoiceNumber,
                 RelatedDocNumber = null,
                 StockExchangeCode = transferOwnershipPlaceReport.StockExchangeContractNumber,
-                StatusAppointment = 0 // ثبت نهایی
+                /// 0: ثبت نهایی
+                /// 7: ثبت اولیه
+                /// 1: استعلام ثبت
+                /// بصورت پیش فرض با وضعیت ثبت نهایی ثبت می شود
+                StatusAppointment = 7
             };
+
+            return transferOwnershipPlaceRequest;
         }
 
         public DateTime ToMiladi(string shamsiDate)
@@ -506,6 +528,38 @@ namespace kashka.Presentation_Layer.Forms
             DateTime gregorianDateTime = persianCalendar.ToDateTime(year, month, day, 0, 0, 0, 0).AddHours(12);
 
             return gregorianDateTime;
+        }
+
+        // Convert Persian date to Gregorian date
+        public static DateTime PersianToGregorian(string persianDateString)
+        {
+            string[] parts = persianDateString.Split('/');
+            int persianYear = int.Parse(parts[0]);
+            int persianMonth = int.Parse(parts[1]);
+            int persianDay = int.Parse(parts[2]);
+
+            // Create an instance of PersianCalendar
+            PersianCalendar persianCalendar = new PersianCalendar();
+
+            // Convert Persian year, month, and day to Gregorian
+            DateTime gregorianDate = new DateTime(622, 3, 21, persianCalendar);
+
+            gregorianDate = gregorianDate.AddDays(-1); // Move to the correct starting date
+
+            gregorianDate = gregorianDate.AddYears(persianYear - 1); // Add years
+
+            int daysInYears = (int)(365.25 * (persianYear - 1)); // Calculate total days from years
+
+            // Adjust days for leap years
+            daysInYears += Enumerable.Range(1, persianYear - 1).Count(y => persianCalendar.IsLeapYear(y));
+
+            int daysInMonths = Enumerable.Range(1, persianMonth - 1).Sum(m => persianCalendar.GetDaysInMonth(persianYear, m));
+
+            int totalDays = daysInYears + daysInMonths + persianDay - 1;
+
+            gregorianDate = gregorianDate.AddDays(totalDays);
+
+            return gregorianDate;
         }
 
 
@@ -530,7 +584,9 @@ namespace kashka.Presentation_Layer.Forms
                         InternalTradeService tradeService = new InternalTradeService(
                              "https://pub-cix.ntsw.ir/services/InternalTradeServices"
                         );
-                        ApiResult<TransferOwnershipPlaceResult> result = await tradeService.CallTransferRestAsync(requestParam);
+                        //ApiResult<TransferOwnershipPlaceResult> result = await tradeService.CallTransferRestAsync(requestParam);
+                        ApiResult<TransferOwnershipPlaceResult> result = await 
+                            tradeService.CallTransferOwnershipPlaceServiceAsync(requestParam);
                         // Check the result
                         if (result!=null &&  result.ResultCode == 0)
                         {
@@ -560,6 +616,7 @@ namespace kashka.Presentation_Layer.Forms
         }
 
         #region DB interactions
+
         private List<WorkSpace> GetWorkSpaceData()
         {
             // Retrieve the connection string from the app.config
@@ -819,17 +876,6 @@ namespace kashka.Presentation_Layer.Forms
             return submitRetailReportList;
         }
         #endregion
-
-        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
 
     }
 }
