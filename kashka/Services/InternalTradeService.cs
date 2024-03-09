@@ -138,7 +138,7 @@ namespace kashka.Services
             }*/
 
 
-            try
+            /*try
             {
                 // Create the SOAP request
                 string soapRequest = $@"
@@ -206,7 +206,7 @@ namespace kashka.Services
                     // Set the content type and SOAPAction header
                     /*client.DefaultRequestHeaders.Add("Content-Type", "text/xml");
                     client.DefaultRequestHeaders.Add("SOAPAction",
-                        "http://internalTradeServices/TransferOwnershipPlace_SI");*/
+                        "http://internalTradeServices/TransferOwnershipPlace_SI");#1#
 
                     // Add Authentication 
                     string username = "internalservice";
@@ -263,7 +263,10 @@ namespace kashka.Services
                 // Handle other exceptions
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 throw;
-            }
+            }*/
+
+
+            return null;
         }
 
         private ApiResult<T> DeserializeResponse<T>(string responseXml)

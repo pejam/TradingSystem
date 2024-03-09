@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace kashka.Business_Logic_Layer.Models
+/*namespace kashka.Business_Logic_Layer.Models
 {
     public class OwnershipTransfer
     {
@@ -28,4 +28,4 @@ namespace kashka.Business_Logic_Layer.Models
         /// </summary>
         public string BuyerMobile { get; set; }
     }
-}
+}*/

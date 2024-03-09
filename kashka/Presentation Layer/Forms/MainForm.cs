@@ -11,6 +11,11 @@ using System.Globalization;
 using System.Windows.Forms;
 using Azure.Core;
 using kashka.Utilities;
+using ServiceReference1;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using System.ServiceModel.Channels;
+using System.ServiceModel;
+using System.Text;
 
 namespace kashka.Presentation_Layer.Forms
 {
@@ -437,7 +442,7 @@ namespace kashka.Presentation_Layer.Forms
         //}
 
 
-        private TransferOwnershipPlaceRequest InitializeTransferOwnershipPlaceRequestFromSelectedRow(
+        /*private TransferOwnershipPlaceRequest InitializeTransferOwnershipPlaceRequestFromSelectedRow(
             TransferOwnershipPlaceReport transferOwnershipPlaceReport)
         {
 
@@ -473,7 +478,7 @@ namespace kashka.Presentation_Layer.Forms
                     WayBillSerial = transferOwnershipPlaceReport.WaybillSerial,
                     /*WayBillDate = (DateTime)(transferOwnershipPlaceReport.WaybillDate != null
                         ? DateTime.ParseExact(transferOwnershipPlaceReport.WaybillDate, "yyyy/MM/dd", CultureInfo.InvariantCulture)
-                        : (DateTime?)null)*/
+                        : (DateTime?)null)#1#
                 },
                 Seller_UserRoleExtraFields = new Seller_UserRoleExtraFields
                 {
@@ -510,7 +515,7 @@ namespace kashka.Presentation_Layer.Forms
             };
 
             return transferOwnershipPlaceRequest;
-        }
+        }*/
 
         public DateTime ToMiladi(string shamsiDate)
         {
@@ -562,9 +567,101 @@ namespace kashka.Presentation_Layer.Forms
             return gregorianDate;
         }
 
+        public static DateTime ConvertShamsiToMiladi(string shamsiDate)
+        {
+            // تعریف یک شیء از کلاس PersianCalendar
+            PersianCalendar persianCalendar = new PersianCalendar();
+
+            // تبدیل تاریخ شمسی به تاریخ میلادی
+            DateTime miladiDate = persianCalendar.ToDateTime(
+                Int32.Parse(shamsiDate.Split('/')[0]),
+                Int32.Parse(shamsiDate.Split('/')[1]),
+                Int32.Parse(shamsiDate.Split('/')[2]),
+                0, 0, 0, 0);
+
+            return miladiDate;
+        }
+
+        private TransferOwnershipPlace_SIRequest InitializeTransferOwnershipPlace_SIRequest(
+            TransferOwnershipPlaceReport transferOwnershipPlaceReport)
+        {
+            DateTime gregorianDate = PersianToGregorian(transferOwnershipPlaceReport.DocumentDate);
+            string DocDate = gregorianDate.ToString("yyyy-MM-dd");
+            DocDate = "2024-01-02";
+
+            TransferOwnershipPlace_SIRequest transferOwnershipPlaceRequest = new TransferOwnershipPlace_SIRequest
+            {
+                username = "Public_User",
+                srvPass = "A32@sVy%f53Z#g3y",
+                //2150248360
+                //Mori1967@
+                password_otpCode = "Mori1967@",
+                PersonNationalCode = transferOwnershipPlaceReport.BuyerNationalId,
+                UserRoleIDstr = null,
+                seller_UserRoleExtraFields = new UserRoleExtraFields_model
+                {
+                    ActivityType = null,    //TODO
+                    LicenseNumber = null,   //TODO
+                    PostalCode = null,      //TODO
+                },
+                userSellType = (int)UserSellType.OwnershipTransfer,
+                documentDate = gregorianDate,       //TODO
+                fromPostalCode = transferOwnershipPlaceReport.SourceWarehousePostalCode,
+                ownershipTransfer = new OwnershipTransfer
+                {
+                    buyerMobile = transferOwnershipPlaceReport.MobileNumber,
+                    buyerName = transferOwnershipPlaceReport.BuyerName,
+                    buyerNationalID = transferOwnershipPlaceReport.BuyerNationalId,
+                    buyerUserRoleIDStr = transferOwnershipPlaceReport.BuyerBusinessRoleCode.ToString(),     //TODO
+                },
+                buyer_UserRoleExtraFields = new UserRoleExtraFields_model
+                {
+                    ActivityType = null,    //TODO
+                    LicenseNumber = null,   //TODO
+                    PostalCode = null,      //TODO
+                },
+
+                placeTransfer = new PlaceTransfer
+                {
+                    ToPostalCode = transferOwnershipPlaceReport.DestinationWarehousePostalCode,
+                    wayBillDate = (DateTime)(transferOwnershipPlaceReport.WaybillDate != null
+                        ? DateTime.ParseExact(transferOwnershipPlaceReport.WaybillDate, "yyyy/MM/dd", CultureInfo.InvariantCulture)
+                        : (DateTime?)null),
+                    wayBillDateSpecified = false,
+                    wayBillHas = (byte)(transferOwnershipPlaceReport.TransportStatus.Equals("بدون بارنامه") ? 2 : 1),       //TODO
+                    wayBillHasSpecified = false,
+                    wayBillNumber = transferOwnershipPlaceReport.WaybillNumber,
+                    wayBillSerial = transferOwnershipPlaceReport.WaybillSerial,
+                },
+                stuffs_In = new[]
+                {
+                    new Stuff_Code_Count_Pair
+                    {
+                        Code = transferOwnershipPlaceReport.ItemId,
+                        Count = (int)transferOwnershipPlaceReport.Quantity,
+                        Price = transferOwnershipPlaceReport.UnitPrice,
+                        Discount = (long?)transferOwnershipPlaceReport.DiscountAmount,
+                        VAT = transferOwnershipPlaceReport.TaxAndDutyAmount,
+                    }
+                },
+                documentDescription = transferOwnershipPlaceReport.DocumentDescription,
+                /// 0: ثبت نهایی
+                /// 7: ثبت اولیه
+                /// 1: استعلام ثبت
+                /// بصورت پیش فرض با وضعیت ثبت نهایی ثبت می شود
+                statusAppointment = 7,
+                DocNumber = transferOwnershipPlaceReport.InvoiceNumber,
+                RelatedDocNumber = null,
+                StockExchangeCode = transferOwnershipPlaceReport.StockExchangeContractNumber,
+            };
+
+            return transferOwnershipPlaceRequest;
+        }
+
 
         private async void btnSend_Click(object sender, EventArgs e)
         {
+
             if (tabCtrl.SelectedIndex == 0)
             {
 
@@ -575,31 +672,8 @@ namespace kashka.Presentation_Layer.Forms
                 {
                     if (dataGridViewTajer.SelectedRows.Count == 1)
                     {
-                        DataGridViewRow selectedRow = dataGridViewTajer.SelectedRows[0];
-                        TransferOwnershipPlaceReport transferOwnershipPlaceReport =
-                            (TransferOwnershipPlaceReport)selectedRow.DataBoundItem;
-
-                        TransferOwnershipPlaceRequest requestParam =
-                            InitializeTransferOwnershipPlaceRequestFromSelectedRow(transferOwnershipPlaceReport);
-                        InternalTradeService tradeService = new InternalTradeService(
-                             "https://pub-cix.ntsw.ir/services/InternalTradeServices"
-                        );
-                        //ApiResult<TransferOwnershipPlaceResult> result = await tradeService.CallTransferRestAsync(requestParam);
-                        ApiResult<TransferOwnershipPlaceResult> result = await 
-                            tradeService.CallTransferOwnershipPlaceServiceAsync(requestParam);
-                        // Check the result
-                        if (result!=null &&  result.ResultCode == 0)
-                        {
-                            WebReqLogger.InsertData(new WebReqInfo
-                            {
-                                FiscalPeriodId = Properties.Settings.Default.FiscalPeriodId,
-                                StockRoomId = Properties.Settings.Default.StockRoomId,
-                                UserId = 1,
-                                InvoiceNumber = transferOwnershipPlaceReport.InvoiceNumber,
-                                Status = result.ResultCode,
-                                Message = result.ResultMessage
-                            });
-                        }
+                        SendWithHeader();
+                        //WithoutHeader();
                     }
                 }
                 catch (HttpRequestException ex)
@@ -613,6 +687,241 @@ namespace kashka.Presentation_Layer.Forms
                     MessageBox.Show($"An error occurred: {ex.Message}");
                 }
             }
+        }
+
+        public async void SendWithHeader()
+        {
+
+            #region Binding and EndPoint
+
+            // Define a custom binding
+            var customBinding = new CustomBinding();
+            // Define a security element with TransportWithMessageCredential mode
+            var security = SecurityBindingElement.CreateUserNameOverTransportBindingElement();
+            security.MessageSecurityVersion = 
+                MessageSecurityVersion.WSSecurity11WSTrustFebruary2005WSSecureConversationFebruary2005WSSecurityPolicy11;
+            // Add the security element to the binding
+            customBinding.Elements.Add(security);
+            // Define a text message encoding element for SOAP 1.2
+            var textMessageEncoding = new TextMessageEncodingBindingElement();
+            textMessageEncoding.MessageVersion = MessageVersion.CreateVersion(EnvelopeVersion.Soap12, AddressingVersion.None);
+            // Add the text message encoding element to the binding
+            customBinding.Elements.Add(textMessageEncoding);
+            // Define an HTTPS transport element
+            var httpsTransport = new HttpsTransportBindingElement();
+            // Add the HTTPS transport element to the binding
+            customBinding.Elements.Add(httpsTransport);
+
+
+            string wsdlUrl = "https://pub-cix.ntsw.ir/services/InternalTradeServices?wsdl";
+            string methodName = "TransferOwnershipPlace_SI";
+            string serviceUrl = wsdlUrl.Replace("?wsdl", "");
+            string endpointUrl = $"{serviceUrl}/{methodName}";
+            var endpointAddress = new EndpointAddress(endpointUrl);
+
+            #endregion Binding and EndPoint
+
+            //var client = new PUBInternalTradeServicesPortTypeClient(customBinding, endpointAddress);
+
+
+            PUBInternalTradeServicesPortTypeClient client = new PUBInternalTradeServicesPortTypeClient(
+                PUBInternalTradeServicesPortTypeClient.EndpointConfiguration.PUBInternalTradeServicesHttpsSoap11Endpoint);
+
+
+            client.ClientCredentials.UserName.UserName = "internalservice";
+            client.ClientCredentials.UserName.Password = "ESBesb12?";
+
+            // Create a scope for the OperationContext
+            using (var scope = new OperationContextScope(client.InnerChannel))
+            {
+                
+                var httpRequestProperty = new HttpRequestMessageProperty();
+                httpRequestProperty.Headers[System.Net.HttpRequestHeader.Authorization] =
+                    "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(
+                        client.ClientCredentials.UserName.UserName
+                          + ":" + 
+                          client.ClientCredentials.UserName.Password));
+                OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
+
+
+
+                DataGridViewRow selectedRow = dataGridViewTajer.SelectedRows[0];
+                TransferOwnershipPlaceReport transferOwnershipPlaceReport =
+                    (TransferOwnershipPlaceReport)selectedRow.DataBoundItem;
+
+                DateTime gregorianDate = ConvertShamsiToMiladi(transferOwnershipPlaceReport.DocumentDate);
+
+                
+                var response = await client.TransferOwnershipPlace_SIAsync(
+                    "Public_User",
+                "A32@sVy%f53Z#g3y",
+                //2150248360
+                //Mori1967@
+                "Mori1967@",
+                 transferOwnershipPlaceReport.BuyerNationalId,
+                 null,
+                 new UserRoleExtraFields_model
+                 {
+                     ActivityType = null,    //TODO
+                     LicenseNumber = null,   //TODO
+                     PostalCode = null,      //TODO
+                 },
+                 (int)UserSellType.OwnershipTransfer,
+                 gregorianDate,       //TODO
+                 transferOwnershipPlaceReport.SourceWarehousePostalCode,
+                 new OwnershipTransfer
+                 {
+                     buyerMobile = transferOwnershipPlaceReport.MobileNumber,
+                     buyerName = transferOwnershipPlaceReport.BuyerName,
+                     buyerNationalID = transferOwnershipPlaceReport.BuyerNationalId,
+                     buyerUserRoleIDStr = transferOwnershipPlaceReport.BuyerBusinessRoleCode.ToString(),     //TODO
+                 },
+                 new UserRoleExtraFields_model
+                 {
+                     ActivityType = null,    //TODO
+                     LicenseNumber = null,   //TODO
+                     PostalCode = null,      //TODO
+                 },
+
+                 new PlaceTransfer
+                 {
+                     ToPostalCode = transferOwnershipPlaceReport.DestinationWarehousePostalCode,
+                     /*wayBillDate = (DateTime)(transferOwnershipPlaceReport.WaybillDate != null
+                        ? DateTime.ParseExact(transferOwnershipPlaceReport.WaybillDate, "yyyy/MM/dd", CultureInfo.InvariantCulture)
+                        : (DateTime?)null),*/
+                     wayBillDateSpecified = false,
+                     wayBillHas = (byte)(transferOwnershipPlaceReport.TransportStatus.Equals("بدون بارنامه") ? 2 : 1),       //TODO
+                     wayBillHasSpecified = false,
+                     wayBillNumber = transferOwnershipPlaceReport.WaybillNumber,
+                     wayBillSerial = transferOwnershipPlaceReport.WaybillSerial,
+                 },
+                new[]
+                {
+                                new Stuff_Code_Count_Pair
+                                {
+                                    Code = transferOwnershipPlaceReport.ItemId,
+                                    Count = (int)transferOwnershipPlaceReport.Quantity,
+                                    Price = transferOwnershipPlaceReport.UnitPrice,
+                                    Discount = (long?)transferOwnershipPlaceReport.DiscountAmount,
+                                    VAT = transferOwnershipPlaceReport.TaxAndDutyAmount,
+                                }
+                },
+                transferOwnershipPlaceReport.DocumentDescription,
+                /// 0: ثبت نهایی
+                /// 7: ثبت اولیه
+                /// 1: استعلام ثبت
+                /// بصورت پیش فرض با وضعیت ثبت نهایی ثبت می شود
+                7,
+                 transferOwnershipPlaceReport.InvoiceNumber,
+                null,
+                 transferOwnershipPlaceReport.StockExchangeContractNumber
+                );
+
+                if (response != null)
+                {
+                    System.Diagnostics.Debug.WriteLine("Response: " + response);
+                }
+            }
+        }
+
+        public async void WithoutHeader()
+        {
+
+            PUBInternalTradeServicesPortTypeClient client = new PUBInternalTradeServicesPortTypeClient(
+                PUBInternalTradeServicesPortTypeClient.EndpointConfiguration.PUBInternalTradeServicesHttpsSoap11Endpoint);
+
+            DataGridViewRow selectedRow = dataGridViewTajer.SelectedRows[0];
+            TransferOwnershipPlaceReport transferOwnershipPlaceReport =
+                (TransferOwnershipPlaceReport)selectedRow.DataBoundItem;
+
+            DateTime gregorianDate = ConvertShamsiToMiladi(transferOwnershipPlaceReport.DocumentDate);
+
+            /*TransferOwnershipPlace_SIRequest requestParam =
+                InitializeTransferOwnershipPlace_SIRequest(transferOwnershipPlaceReport);*/
+            var response = await client.TransferOwnershipPlace_SIAsync(
+                "Public_User",
+                "A32@sVy%f53Z#g3y",
+                //2150248360
+                //Mori1967@
+                "Mori1967@",
+                 transferOwnershipPlaceReport.BuyerNationalId,
+                 null,
+                 new UserRoleExtraFields_model
+                 {
+                     ActivityType = null,    //TODO
+                     LicenseNumber = null,   //TODO
+                     PostalCode = null,      //TODO
+                 },
+                 (int)UserSellType.OwnershipTransfer,
+                 gregorianDate,       //TODO
+                 transferOwnershipPlaceReport.SourceWarehousePostalCode,
+                 new OwnershipTransfer
+                 {
+                     buyerMobile = transferOwnershipPlaceReport.MobileNumber,
+                     buyerName = transferOwnershipPlaceReport.BuyerName,
+                     buyerNationalID = transferOwnershipPlaceReport.BuyerNationalId,
+                     buyerUserRoleIDStr = transferOwnershipPlaceReport.BuyerBusinessRoleCode.ToString(),     //TODO
+                 },
+                 new UserRoleExtraFields_model
+                 {
+                     ActivityType = null,    //TODO
+                     LicenseNumber = null,   //TODO
+                     PostalCode = null,      //TODO
+                 },
+
+                 new PlaceTransfer
+                 {
+                     ToPostalCode = transferOwnershipPlaceReport.DestinationWarehousePostalCode,
+                     /*wayBillDate = (DateTime)(transferOwnershipPlaceReport.WaybillDate != null
+                        ? DateTime.ParseExact(transferOwnershipPlaceReport.WaybillDate, "yyyy/MM/dd", CultureInfo.InvariantCulture)
+                        : (DateTime?)null),*/
+                     wayBillDateSpecified = false,
+                     wayBillHas = (byte)(transferOwnershipPlaceReport.TransportStatus.Equals("بدون بارنامه") ? 2 : 1),       //TODO
+                     wayBillHasSpecified = false,
+                     wayBillNumber = transferOwnershipPlaceReport.WaybillNumber,
+                     wayBillSerial = transferOwnershipPlaceReport.WaybillSerial,
+                 },
+                new[]
+                {
+                                new Stuff_Code_Count_Pair
+                                {
+                                    Code = transferOwnershipPlaceReport.ItemId,
+                                    Count = (int)transferOwnershipPlaceReport.Quantity,
+                                    Price = transferOwnershipPlaceReport.UnitPrice,
+                                    Discount = (long?)transferOwnershipPlaceReport.DiscountAmount,
+                                    VAT = transferOwnershipPlaceReport.TaxAndDutyAmount,
+                                }
+                },
+                transferOwnershipPlaceReport.DocumentDescription,
+                /// 0: ثبت نهایی
+                /// 7: ثبت اولیه
+                /// 1: استعلام ثبت
+                /// بصورت پیش فرض با وضعیت ثبت نهایی ثبت می شود
+                7,
+                 transferOwnershipPlaceReport.InvoiceNumber,
+                null,
+                 transferOwnershipPlaceReport.StockExchangeContractNumber
+                );
+
+            if (response != null)
+            {
+                System.Diagnostics.Debug.WriteLine("Response: " + response);
+            }
+
+
+            // Check the result
+            /*if (result!=null &&  result.ResultCode == 0)
+            {
+                WebReqLogger.InsertData(new WebReqInfo
+                {
+                    FiscalPeriodId = Properties.Settings.Default.FiscalPeriodId,
+                    StockRoomId = Properties.Settings.Default.StockRoomId,
+                    UserId = 1,
+                    InvoiceNumber = transferOwnershipPlaceReport.InvoiceNumber,
+                    Status = result.ResultCode,
+                    Message = result.ResultMessage
+                });
+            }*/
         }
 
         #region DB interactions
@@ -695,7 +1004,7 @@ namespace kashka.Presentation_Layer.Forms
                             fiscalPeriod.TRes = reader["TRes"].ToString();*/
 
                             fiscalPeriods.Add(
-                                CodePageReflection<FiscalPeriod>.fromTadbir(_codepageService, fiscalPeriod));
+                                        CodePageReflection<FiscalPeriod>.fromTadbir(_codepageService, fiscalPeriod));
                         }
                     }
 
@@ -876,6 +1185,45 @@ namespace kashka.Presentation_Layer.Forms
             return submitRetailReportList;
         }
         #endregion
+
+
+
+
+
+        // قبل از اد سرویس از این استفاده شد
+        /*
+         *try
+           {
+           if (dataGridViewTajer.SelectedRows.Count == 1)
+           {
+           DataGridViewRow selectedRow = dataGridViewTajer.SelectedRows[0];
+           TransferOwnershipPlaceReport transferOwnershipPlaceReport =
+           (TransferOwnershipPlaceReport)selectedRow.DataBoundItem;
+           
+           TransferOwnershipPlaceRequest requestParam =
+           InitializeTransferOwnershipPlaceRequestFromSelectedRow(transferOwnershipPlaceReport);
+           InternalTradeService tradeService = new InternalTradeService(
+           "https://pub-cix.ntsw.ir/services/InternalTradeServices"
+           );
+           //ApiResult<TransferOwnershipPlaceResult> result = await tradeService.CallTransferRestAsync(requestParam);
+           ApiResult<TransferOwnershipPlaceResult> result = await 
+           tradeService.CallTransferOwnershipPlaceServiceAsync(requestParam);
+           // Check the result
+           if (result!=null &&  result.ResultCode == 0)
+           {
+           WebReqLogger.InsertData(new WebReqInfo
+           {
+           FiscalPeriodId = Properties.Settings.Default.FiscalPeriodId,
+           StockRoomId = Properties.Settings.Default.StockRoomId,
+           UserId = 1,
+           InvoiceNumber = transferOwnershipPlaceReport.InvoiceNumber,
+           Status = result.ResultCode,
+           Message = result.ResultMessage
+           });
+           }
+           }
+           }
+         */
 
     }
 }

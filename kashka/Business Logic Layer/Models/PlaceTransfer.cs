@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace kashka.Business_Logic_Layer.Models
+/*namespace kashka.Business_Logic_Layer.Models
 {
     public class PlaceTransfer
     {
@@ -33,4 +33,4 @@ namespace kashka.Business_Logic_Layer.Models
         /// </summary>
         public DateTime WayBillDate { get; set; }
     }
-}
+}*/
